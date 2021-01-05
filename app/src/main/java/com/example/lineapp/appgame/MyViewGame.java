@@ -99,55 +99,65 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Handle user input touch event actions
-        switch (event.getActionMasked()) {
-            case MotionEvent.ACTION_DOWN:
-                float x = event.getX();
-                float y = event.getY();
-                joystickPressedList.clear();
-                if (joystick1List.get(0).isPressed(x, y)) {
-                    joystickPointer1Id = event.getPointerId(event.getActionIndex());
-                    joystick1.setIsPressed(true);
-                    joystickPressedList.add(0);
-                } else if (joystick1List.get(1).isPressed(x, y)) {
-                    joystickPointer2Id = event.getPointerId(event.getActionIndex());
-                    joystick1List.get(1).setIsPressed(true);
-                    joystickPressedList.add(1);
-                }
-                return true;
-            case MotionEvent.ACTION_POINTER_DOWN:
-                if (joystickPressedList.size() == 1) {
-                    int joy = joystickPressedList.get(0) == 0 ? 1 : 0;
-                    joystickPressedList.add(joy);
-                }
-                Joystick1 joystick = joystickPressedList.get(event.getActionIndex()) == 0 ? joystick1List.get(0) : joystick1List.get(1);
-                joystick.setIsPressed(true);
-                joystick.setColor(Color.DKGRAY);
-                return true;
-            case MotionEvent.ACTION_MOVE:
-                for (int i = 0; i < joystickPressedList.size(); i++) {
-                    int currentIDPoint = event.getPointerId(i);
-                    Joystick1 joys = joystick1List.get(i);
-                    double lX = event.getX(event.findPointerIndex(currentIDPoint));
-                    double lY = event.getY(event.findPointerIndex(currentIDPoint));
-                    joys.setActuator(lX, lY);
-                }
-                return true;
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_POINTER_UP:
-                int joy = joystickPressedList.get(event.getActionIndex());
-                for (int i = 0; i < joystickPressedList.size(); i++) {
-                    int currentIDPoint = event.getPointerId(i);
-                    Joystick1 joys = joystick1List.get(i);
-                    if (joy == currentIDPoint)
-                    {
-                        joys.setIsPressed(false);
-                        joys.resetActuator();
-                        Log.i(TAG," POINT UPP");
+        try {
+            switch (event.getActionMasked()) {
+
+                case MotionEvent.ACTION_DOWN:
+                    float x = event.getX();
+                    float y = event.getY();
+                    joystickPressedList.clear();
+                    if (joystick1List.get(0).isPressed(x, y)) {
+                        joystickPointer1Id = event.getPointerId(event.getActionIndex());
+                        joystick1.setIsPressed(true);
+                        joystickPressedList.add(0);
+                    } else if (joystick1List.get(1).isPressed(x, y)) {
+                        joystickPointer2Id = event.getPointerId(event.getActionIndex());
+                        joystick1List.get(1).setIsPressed(true);
+                        joystickPressedList.add(1);
                     }
-                }
-                return true;
+                    return true;
+                case MotionEvent.ACTION_POINTER_DOWN:
+                    if (joystickPressedList.size() == 1) {
+                        int joy = joystickPressedList.get(0) == 0 ? 1 : 0;
+                        joystickPressedList.add(joy);
+                    }
+                    Joystick1 joystick = joystickPressedList.get(event.getActionIndex()) == 0 ? joystick1List.get(0) : joystick1List.get(1);
+                    joystick.setIsPressed(true);
+                    joystick.setColor(Color.DKGRAY);
+                    return true;
+                case MotionEvent.ACTION_MOVE:
+                    for (int i = 0; i < joystickPressedList.size(); i++) {
+                        int currentIDPoint = event.getPointerId(i);
+                        Joystick1 joys = joystick1List.get(i);
+                        double lX = event.getX(event.findPointerIndex(currentIDPoint));
+                        double lY = event.getY(event.findPointerIndex(currentIDPoint));
+                        joys.setActuator(lX, lY);
+                        //break;
+                    }
+                    return true;
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_POINTER_UP:
+                    int joy = joystickPressedList.get(event.getActionIndex());
+                    for (int i = 0; i < joystickPressedList.size(); i++) {
+                        int currentIDPoint = event.getPointerId(i);
+                        Joystick1 joys = joystick1List.get(i);
+                        if (joy == currentIDPoint)
+                        {
+                            joys.setIsPressed(false);
+                            joys.resetActuator();
+                            Log.i(TAG," POINT UPP");
+                            break;
+                        }
+                    }
+                    return true;
+            }
+            return true;
         }
-        return true;
+        catch(Exception ex)
+        {
+            Log.i(TAG," EEE" + ex);
+            return false;
+        }
     }
 
 
