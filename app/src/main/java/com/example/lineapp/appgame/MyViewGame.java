@@ -29,6 +29,7 @@ package com.example.lineapp.appgame;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Path;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -47,13 +48,13 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
     //private Game game;
 
     private static final String TAG = "MyActivity";
-    private final Joystick1 joystick1;
-    private final Joystick2 joystick2;
+    private final Joystick1 joystick1, joystick2;
     private final long touchDownTime = -1;
     private final long touchUpTime = -1;
     private final float touchX = -1;
     private final float touchY = -1;
     private final HashMap<Integer, Joystick1> DesignJoysticks = new HashMap<Integer, Joystick1>();
+    private final int numeroAtaque = 0;
     int posicionJ1_X = 100;
     int posicionJ1_y = 700;
     int posicionJ2_X = 900;
@@ -63,7 +64,6 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
     private int joystickPointer1Id = 0;
     private int joystickPointer2Id = 0;
     private MyViewGameLoop viewLoop;
-    private int numeroAtaque = 0;
     private double previousX1;
     private double previousY1;
     private double previousX2;
@@ -80,8 +80,8 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         viewLoop = new MyViewGameLoop(this, surfaceHolder);
 
         // Initialize game panels
-        joystick1 = new Joystick1(posicionJ1_X, posicionJ1_y, 70, 40);
-        joystick2 = new Joystick2(posicionJ2_X, posicionJ2_y, 70, 40);
+        joystick1 = new Joystick1(posicionJ1_X, posicionJ1_y, 70, 40, Color.GREEN);
+        joystick2 = new Joystick1(posicionJ2_X, posicionJ2_y, 70, 40, Color.RED);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         setFocusable(true);
@@ -94,22 +94,29 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         // Handle user input touch event actions
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_POINTER_DOWN:
+                if (joystick1.isPressed(x, y)) {
+                    joystickPointer1Id = event.getPointerId(event.getActionIndex());
+                    joystick1.setColor(Color.BLUE);
+                    joystick1.setIsPressed(true);
+                } else if (joystick2.isPressed(x, y)) {
+                    joystickPointer2Id = event.getPointerId(event.getActionIndex());
+                    joystick2.setColor(Color.YELLOW);
+                    joystick2.setIsPressed(true);
+                }
+                return true;
+           /* case MotionEvent.ACTION_POINTER_DOWN:
                 if (joystick1.isPressed((double) event.getX(), (double) event.getY())) {
                     // Joystick is pressed in this event -> setIsPressed(true) and store pointer id
                     joystickPointer1Id = event.getPointerId(event.getActionIndex());
                     joystick1.setIsPressed(true);
-                } else {
-                    numeroAtaque++;
                 }
                 if (joystick2.isPressed((double) event.getX(), (double) event.getY())) {
                     joystickPointer2Id = event.getPointerId(event.getActionIndex());
                     joystick2.setIsPressed(true);
-                } else {
-                    numeroAtaque++;
                 }
                 return true;
-            case MotionEvent.ACTION_MOVE:
+                */
+           /* case MotionEvent.ACTION_MOVE:
                 if (joystickPointer1Id == event.getPointerId(event.getActionIndex())) {
                     joystick1.setActuator(event.getX(joystickPointer1Id), event.getX(joystickPointer1Id));
                 }
@@ -125,12 +132,13 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                     joystick1.resetActuator();
                     Log.i(TAG, " 11 POINT UPPP X:: " + previousX1 + " Y:: " + previousY1);
                 }
-                if (joystickPointer1Id == event.getPointerId(event.getActionIndex())) {
+                if (joystickPointer2Id == event.getPointerId(event.getActionIndex())) {
                     joystick2.setIsPressed(false);
                     joystick2.resetActuator();
                     Log.i(TAG, " 2222 POINT UPP  X:: " + previousX2 + " Y:: " + previousY2);
                 }
                 return true;
+                */
         }
         return true;
     }

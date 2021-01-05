@@ -9,20 +9,19 @@ public class Joystick1 {
 
     private final int outerCircleCenterPositionX;
     private final int outerCircleCenterPositionY;
-    private int innerCircleCenterPositionX;
-    private int innerCircleCenterPositionY;
-
     private final int outerCircleRadius;
     private final int innerCircleRadius;
-
     private final Paint innerCirclePaint;
     private final Paint outerCirclePaint;
+    private int innerCircleCenterPositionX;
+    private int innerCircleCenterPositionY;
     private boolean isPressed = false;
     private double joystickCenterToTouchDistance;
     private double actuatorX;
     private double actuatorY;
+    private int color;
 
-    public Joystick1(int centerPositionX, int centerPositionY, int outerCircleRadius, int innerCircleRadius) {
+    public Joystick1(int centerPositionX, int centerPositionY, int outerCircleRadius, int innerCircleRadius, int color) {
 
         // Outer and inner circle make up the joystick
         outerCircleCenterPositionX = centerPositionX;
@@ -40,7 +39,7 @@ public class Joystick1 {
         outerCirclePaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
         innerCirclePaint = new Paint();
-        innerCirclePaint.setColor(Color.GREEN);
+        innerCirclePaint.setColor(color);
         innerCirclePaint.setStyle(Paint.Style.FILL_AND_STROKE);
     }
 
@@ -105,12 +104,85 @@ public class Joystick1 {
         return actuatorX;
     }
 
+    public void setActuatorX(double actuatorX) {
+        this.actuatorX = actuatorX;
+    }
+
     public double getActuatorY() {
         return actuatorY;
+    }
+
+    public void setActuatorY(double actuatorY) {
+        this.actuatorY = actuatorY;
     }
 
     public void resetActuator() {
         actuatorX = 0;
         actuatorY = 0;
+    }
+
+    public int getOuterCircleCenterPositionX() {
+        return outerCircleCenterPositionX;
+    }
+
+    public int getOuterCircleCenterPositionY() {
+        return outerCircleCenterPositionY;
+    }
+
+    public int getInnerCircleCenterPositionX() {
+        return innerCircleCenterPositionX;
+    }
+
+    public void setInnerCircleCenterPositionX(int innerCircleCenterPositionX) {
+        this.innerCircleCenterPositionX = innerCircleCenterPositionX;
+    }
+
+    public int getInnerCircleCenterPositionY() {
+        return innerCircleCenterPositionY;
+    }
+
+    public void setInnerCircleCenterPositionY(int innerCircleCenterPositionY) {
+        this.innerCircleCenterPositionY = innerCircleCenterPositionY;
+    }
+
+    public int getOuterCircleRadius() {
+        return outerCircleRadius;
+    }
+
+    public int getInnerCircleRadius() {
+        return innerCircleRadius;
+    }
+
+    public Paint getInnerCirclePaint() {
+        return innerCirclePaint;
+    }
+
+    public Paint getOuterCirclePaint() {
+        return outerCirclePaint;
+    }
+
+    public boolean isPressed() {
+        return isPressed;
+    }
+
+    public void setPressed(boolean pressed) {
+        isPressed = pressed;
+    }
+
+    public double getJoystickCenterToTouchDistance() {
+        return joystickCenterToTouchDistance;
+    }
+
+    public void setJoystickCenterToTouchDistance(double joystickCenterToTouchDistance) {
+        this.joystickCenterToTouchDistance = joystickCenterToTouchDistance;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+        this.innerCirclePaint.setColor(this.color);
     }
 }
