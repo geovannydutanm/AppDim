@@ -80,7 +80,7 @@ public class MyView3 extends View {
             int colr = PuntosColor.get(i);
             dibujarPintar.setColor(colr);
             canvas.drawPath(paths.valueAt(i), dibujarPintar);
-            joystickTest.draw(canvas);
+            //joystickTest.draw(canvas);
         }
     }
 

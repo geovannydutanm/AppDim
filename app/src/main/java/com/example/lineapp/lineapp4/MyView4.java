@@ -111,7 +111,7 @@ public class MyView4 extends View {
                         }
                     }
                 }
-                //this.invalidate();
+                //this.invalidate();postInvalidate();
                 break;
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP:

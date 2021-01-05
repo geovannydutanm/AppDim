@@ -69,8 +69,12 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback{
     private final Joystick2 joystick2;
     int posicionJ1_X =100;
     int posicionJ1_y =700;
-    int posicionJ2_X =400;
-    int posicionJ2_y =400;
+    int posicionJ2_X =900;
+    int posicionJ2_y =900;
+    private long touchDownTime = -1;
+    private long touchUpTime = -1;
+    private float touchX = -1;
+    private float touchY = -1;
 
 
     //private HashMap<Integer, MyView4.DesignPatch> DesignPs = new HashMap<Integer, MyView4.DesignPatch>();
@@ -124,76 +128,84 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback{
 
     int index_joystickPointer1;
     int index_joystickPointer2;
+    private double previousX1;
+    private double previousY1;
+    private double previousX2;
+    private double previousY2;
     private static final String TAG = "MyActivity";
-
     private SparseArray<Path> paths;
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        //int pointerIndex = event.getActionIndex();
-        //int pointerId = event.getPointerId(pointerIndex);
-        int pointer1Id = event.getPointerId(joystickPointer1Id);
-        int pointer2Id = event.getPointerId(joystickPointer2Id);
-
-        Log.i(TAG," POINT: " + pointer1Id);
-        Log.i(TAG," POINT: " + pointer2Id);
-
-        int index = event.getActionIndex();
-        Path pathMatriz;
-        int puntoId = event.getPointerId(index);
+        float x = event.getX();
+        float y = event.getY();
         // Handle user input touch event actions
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_POINTER_DOWN:
-                pathMatriz = new Path();
-                pathMatriz.moveTo(event.getX(index), event.getY(index));
-                paths.put(puntoId, pathMatriz);
+                /*
                 if (joystick1.getIsPressed()) {
                     // Joystick was pressed before this event -> cast spell
                     numeroAtaque ++;
-                    Log.i(TAG," INDEX MOVE 1 PRESSS" + pointer1Id);
-                }else if (joystick1.isPressed(event.getX(0), event.getY(0))) {
+                } */
+                if (joystick1.isPressed((double) event.getX(), (double) event.getY())) {
                     // Joystick is pressed in this event -> setIsPressed(true) and store pointer id
-                    joystickPointer1Id = event.getPointerId(pointer1Id);
+                    joystickPointer1Id = event.getPointerId(event.getActionIndex());
                     joystick1.setIsPressed(true);
-                    Log.i(TAG," INDEX MOVE 1 DDDDD" + pointer1Id);
-                }
-                else if (joystick2.getIsPressed()) {
-                    // Joystick was pressed before this event -> cast spell
-                    Log.i(TAG," INDEX MOVE 2  PRESSS" + pointer2Id);
+                } else {
                     numeroAtaque ++;
-                } else if (joystick2.isPressed(event.getX(1), event.getY(1))) {
+                }
+                //22
+                /*if (joystick2.getIsPressed()) {
+                    // Joystick was pressed before this event -> cast spell
+                    numeroAtaque ++;
+                } */
+                if (joystick2.isPressed((double) event.getX(), (double) event.getY())) {
                     // Joystick is pressed in this event -> setIsPressed(true) and store pointer id
-                    joystickPointer2Id = event.getPointerId(pointer2Id);
+                    joystickPointer2Id = event.getPointerId(event.getActionIndex());
                     joystick2.setIsPressed(true);
-                    Log.i(TAG," INDEX MOVE 2 DDDDD" + event.getPointerCount());
                 } else {
                     // Joystick was not previously, and is not pressed in this event -> cast spell
                     numeroAtaque ++;
                 }
-                break;
-                //return true;
+                return true;
             case MotionEvent.ACTION_MOVE:
-                if (joystick1.getIsPressed()) {
-                    // Joystick was pressed previously and is now moved
-                    joystick1.setActuator((double) event.getX(index), (double) event.getY(index));
-                    Log.i(TAG," INDEX MOVE 1, index "+ pointer1Id  +" DDDDD== "  + event.getPointerCount()+ " X= " + event.getX(pointer1Id) + "  y =" +event.getY(pointer1Id));
-                }else if (joystick2.getIsPressed()) {
-                    // Joystick was pressed previously and is now moved
-                    joystick2.setActuator((double) event.getX(index), (double) event.getY(index));
-                    Log.i(TAG," INDEX MOVE 2, index "+ pointer2Id  +" DDDDD== " + event.getPointerCount()+ " X= " + event.getX(pointer2Id) + "  y =" +event.getY(pointer2Id));
-                }
                 /*for (int i = 0; i < event.getPointerCount(); i++) {
-                    if (joystick1.getIsPressed()) {
-                        // Joystick was pressed previously and is now moved
-                        joystick1.setActuator((double) event.getX(pointer1Id), (double) event.getY(pointer1Id));
-                        Log.i(TAG," INDEX MOVE 1, index "+ pointer1Id  +" DDDDD== "  + event.getPointerCount()+ " X= " + event.getX(i) + "  y =" +event.getY(i));
-                    }else if (joystick2.getIsPressed()) {
-                        // Joystick was pressed previously and is now moved
-                        joystick2.setActuator((double) event.getX(pointer2Id), (double) event.getY(pointer2Id));
-                        Log.i(TAG," INDEX MOVE 2, index "+ pointer2Id  +" DDDDD== " + event.getPointerCount()+ " X= " + event.getX(i) + "  y =" +event.getY(i));
+                    if  (joystickPointer1Id == event.getPointerId(event.getActionIndex())){
+                        joystick1.setActuator( event.getX(i), event.getX(i));
+                    }
+                    if  (joystickPointer2Id == event.getPointerId(event.getActionIndex())){
+                        joystick2.setActuator( event.getX(i), event.getX(i));
+
                     }
                 }*/
+                if  (joystickPointer1Id == event.getPointerId(event.getActionIndex())){
+                    joystick1.setActuator( event.getX(joystickPointer1Id), event.getX(joystickPointer1Id));
+                }
+                if  (joystickPointer2Id == event.getPointerId(event.getActionIndex())){
+                    joystick2.setActuator( event.getX(joystickPointer2Id), event.getX(joystickPointer2Id));
+                }
+                /*if  (joystickPointerId1 == event.getPointerId(event.getActionIndex())){
 
+                }
+                if (joystick1.getIsPressed()) {
+                    previousX1 = x;
+                    previousY1 = y;
+                    // Joystick was pressed previously and is now moved
+                    joystick1.setActuator( event.getX(joystickPointerId1), event.getX(joystickPointerId1));
+                    Log.i(TAG," 11 POINT  X:: " + previousX1 + " Y:: "+ previousY1);
+                    Log.i(TAG," 11 POINT  X:: " + previousX1 + " Y:: "+ previousY1);
+                }
+                if (joystick2.getIsPressed()) {
+                    previousX2 = x;
+                    previousY2 = y;
+                    // Joystick was pressed previously and is now moved
+                    //joystick2.setActuator((double) event.getX(i), (double) event.getY(i));
+                    joystick2.setActuator( event.getX(joystickPointerId2), event.getX(joystickPointerId2));
+                    //joystick2.setActuator( previousX2, previousY2);
+                    Log.i(TAG," 2222 POINT  X:: " + previousX2 + " Y:: "+ previousY2);
+                    Log.i(TAG," 2222 POINT  X:: " + previousX2 + " Y:: "+ previousY2);
+                }*/
+                ////requestRender();
                 return true;
 
             case MotionEvent.ACTION_UP:
@@ -202,16 +214,19 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback{
                     // joystick pointer was let go off -> setIsPressed(false) and resetActuator()
                     joystick1.setIsPressed(false);
                     joystick1.resetActuator();
+                    Log.i(TAG," 11 POINT UPPP X:: " + previousX1 + " Y:: "+ previousY1);
                 }
-                if (joystickPointer2Id == event.getPointerId(event.getActionIndex())) {
+                //2222222222222
+                if (joystickPointer1Id == event.getPointerId(event.getActionIndex())) {
                     // joystick pointer was let go off -> setIsPressed(false) and resetActuator()
                     joystick2.setIsPressed(false);
                     joystick2.resetActuator();
+                    Log.i(TAG," 2222 POINT UPP  X:: " + previousX2 + " Y:: "+ previousY2);
                 }
                 return true;
         }
-
-        return super.onTouchEvent(event);
+        return true;
+        //return super.onTouchEvent(event);
     }
 
 
