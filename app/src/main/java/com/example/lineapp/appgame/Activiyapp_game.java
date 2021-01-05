@@ -1,21 +1,18 @@
 package com.example.lineapp.appgame;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.lineapp.R;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class Activiyapp_game extends AppCompatActivity {
-/*
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_activiyapp_game);
-    }
-*/
+    /*
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_activiyapp_game);
+        }
+    */
     private MyViewGame game;
 
     @Override
@@ -24,7 +21,7 @@ public class Activiyapp_game extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         // Set content view to game, so that objects in the Game class can be rendered to the screen
-        game = new MyViewGame( this);
+        game = new MyViewGame(this);
         setContentView(game);
     }
 

@@ -7,16 +7,16 @@ import android.graphics.Paint;
 
 public class Joystick1 {
 
-    private int outerCircleCenterPositionX;
-    private int outerCircleCenterPositionY;
+    private final int outerCircleCenterPositionX;
+    private final int outerCircleCenterPositionY;
     private int innerCircleCenterPositionX;
     private int innerCircleCenterPositionY;
 
-    private int outerCircleRadius;
-    private int innerCircleRadius;
+    private final int outerCircleRadius;
+    private final int innerCircleRadius;
 
-    private Paint innerCirclePaint;
-    private Paint outerCirclePaint;
+    private final Paint innerCirclePaint;
+    private final Paint outerCirclePaint;
     private boolean isPressed = false;
     private double joystickCenterToTouchDistance;
     private double actuatorX;
@@ -67,8 +67,8 @@ public class Joystick1 {
     }
 
     private void updateInnerCirclePosition() {
-        innerCircleCenterPositionX = (int) (outerCircleCenterPositionX + actuatorX*outerCircleRadius);
-        innerCircleCenterPositionY = (int) (outerCircleCenterPositionY + actuatorY*outerCircleRadius);
+        innerCircleCenterPositionX = (int) (outerCircleCenterPositionX + actuatorX * outerCircleRadius);
+        innerCircleCenterPositionY = (int) (outerCircleCenterPositionY + actuatorY * outerCircleRadius);
     }
 
     public void setActuator(double touchPositionX, double touchPositionY) {
@@ -76,12 +76,12 @@ public class Joystick1 {
         double deltaY = touchPositionY - outerCircleCenterPositionY;
         double deltaDistance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
 
-        if(deltaDistance < outerCircleRadius) {
-            actuatorX = deltaX/outerCircleRadius;
-            actuatorY = deltaY/outerCircleRadius;
+        if (deltaDistance < outerCircleRadius) {
+            actuatorX = deltaX / outerCircleRadius;
+            actuatorY = deltaY / outerCircleRadius;
         } else {
-            actuatorX = deltaX/deltaDistance;
-            actuatorY = deltaY/deltaDistance;
+            actuatorX = deltaX / deltaDistance;
+            actuatorY = deltaY / deltaDistance;
         }
     }
 
