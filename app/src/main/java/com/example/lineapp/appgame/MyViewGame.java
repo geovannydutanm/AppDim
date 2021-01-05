@@ -28,6 +28,7 @@ package com.example.lineapp.appgame;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.DisplayMetrics;
@@ -44,10 +45,10 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
     private static final String TAG = "MyActivity";
     private final List<Joystick1> joystick1List = new ArrayList<>(2);
     private final List<Integer> joystickPressedList = new ArrayList<>(2);
-    private final int posicionJ1_X = 100;
-    private final int posicionJ1_y = 700;
-    private final int posicionJ2_X = 900;
-    private final int posicionJ2_Y = 900;
+    private final int posicionJ1_X;
+    private final int posicionJ1_Y;
+    private final int posicionJ2_X;
+    private final int posicionJ2_Y;
     private MyViewGameLoop viewLoop;
 
     public MyViewGame(Context context) {
@@ -57,7 +58,13 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
 
-        joystick1List.add(new Joystick1(posicionJ1_X, posicionJ1_y, 70, 40, Color.GREEN));
+        posicionJ1_X = getScreenWidth() / 2;
+        posicionJ2_X = getScreenWidth() / 2;
+
+        posicionJ1_Y = 150;
+        posicionJ2_Y = getScreenHeight() - getScreenHeight() / 5;
+
+        joystick1List.add(new Joystick1(posicionJ1_X, posicionJ1_Y, 70, 40, Color.GREEN));
         joystick1List.add(new Joystick1(posicionJ2_X, posicionJ2_Y, 70, 40, Color.RED));
 
         viewLoop = new MyViewGameLoop(this, surfaceHolder);
@@ -66,6 +73,14 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         setFocusable(true);
+    }
+
+    public static int getScreenWidth() {
+        return Resources.getSystem().getDisplayMetrics().widthPixels;
+    }
+
+    public static int getScreenHeight() {
+        return Resources.getSystem().getDisplayMetrics().heightPixels;
     }
 
     @Override
