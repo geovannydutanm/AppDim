@@ -106,14 +106,10 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                 joystickPressedList.clear();
                 if (joystick1List.get(0).isPressed(x, y)) {
                     joystickPointer1Id = event.getPointerId(event.getActionIndex());
-                    joystick1List.get(0).setColor(Color.BLUE);
-                    joystick1List.get(1).setColor(Color.RED);
                     joystick1.setIsPressed(true);
                     joystickPressedList.add(0);
                 } else if (joystick1List.get(1).isPressed(x, y)) {
                     joystickPointer2Id = event.getPointerId(event.getActionIndex());
-                    joystick1List.get(0).setColor(Color.GREEN);
-                    joystick1List.get(1).setColor(Color.YELLOW);
                     joystick1List.get(1).setIsPressed(true);
                     joystickPressedList.add(1);
                 }
@@ -127,15 +123,16 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                 joystick.setIsPressed(true);
                 joystick.setColor(Color.DKGRAY);
                 return true;
-           /* case MotionEvent.ACTION_MOVE:
-                if (joystickPointer1Id == event.getPointerId(event.getActionIndex())) {
-                    joystick1.setActuator(event.getX(joystickPointer1Id), event.getX(joystickPointer1Id));
-                }
-                if (joystickPointer2Id == event.getPointerId(event.getActionIndex())) {
-                    joystick2.setActuator(event.getX(joystickPointer2Id), event.getX(joystickPointer2Id));
+            case MotionEvent.ACTION_MOVE:
+                for (int i = 0; i < joystickPressedList.size(); i++) {
+                    int currentIDPoint = event.getPointerId(i);
+                    Joystick1 joys = joystick1List.get(i);
+                    double lX = event.getX(event.findPointerIndex(currentIDPoint));
+                    double lY = event.getY(event.findPointerIndex(currentIDPoint));
+                    joys.setActuator(lX, lY);
                 }
                 return true;
-
+            /*
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP:
                 if (joystickPointer1Id == event.getPointerId(event.getActionIndex())) {
