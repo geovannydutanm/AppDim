@@ -58,14 +58,14 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
     private final HashMap<Integer, Joystick1> DesignJoysticks = new HashMap<Integer, Joystick1>();
     private final int numeroAtaque = 0;
     private final List<Integer> joystickPressedList = new ArrayList<>(2);
+    private final Joystick1 joystick1;
+    private final Joystick1 joystick2;
     int posicionJ1_X = 100;
     int posicionJ1_y = 700;
     int posicionJ2_X = 900;
     int posicionJ2_y = 900;
     int index_joystickPointer1;
     int index_joystickPointer2;
-    private final Joystick1 joystick1;
-    private final Joystick1 joystick2;
     private int joystickPointer1Id = 0;
     private int joystickPointer2Id = 0;
     private MyViewGameLoop viewLoop;
@@ -118,16 +118,14 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                     joystickPressedList.add(1);
                 }
                 return true;
-           /* case MotionEvent.ACTION_POINTER_DOWN:
-                if (event.getActionIndex() == joystickPressedList.get(0)) {
-                    joystickPointer1Id = event.getPointerId(event.getActionIndex());
-                    joystick1List.get(0).setIsPressed(true);
-                    joystick1List.get(0).setColor(Color.RED);
-                } else if (event.getActionIndex() == joystickPressedList.get(1)) {
-                    joystickPointer2Id = event.getPointerId(event.getActionIndex());
-                    joystick1List.get(1).setIsPressed(true);
-                    joystick1List.get(1).setColor(Color.GREEN);
+            case MotionEvent.ACTION_POINTER_DOWN:
+                if (joystickPressedList.size() == 1) {
+                    int joy = joystickPressedList.get(0) == 0 ? 1 : 0;
+                    joystickPressedList.add(joy);
                 }
+                Joystick1 joystick = joystickPressedList.get(event.getActionIndex()) == 0 ? joystick1List.get(0) : joystick1List.get(1);
+                joystick.setIsPressed(true);
+                joystick.setColor(Color.DKGRAY);
                 return true;
            /* case MotionEvent.ACTION_MOVE:
                 if (joystickPointer1Id == event.getPointerId(event.getActionIndex())) {
