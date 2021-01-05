@@ -132,18 +132,20 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                     joys.setActuator(lX, lY);
                 }
                 return true;
-            case MotionEvent.ACTION_POINTER_UP:
-                int joyUp = joystickPressedList.get(event.getActionIndex());
-                int color = joyUp == 0 ? Color.GREEN : Color.RED;
-                joystick1List.get(joyUp).setColor(color);
-                joystick1List.get(joyUp).setIsPressed(false);
-                joystick1List.get(joyUp).resetActuator();
-                return true;
-
-            /*
             case MotionEvent.ACTION_UP:
-            */
-
+            case MotionEvent.ACTION_POINTER_UP:
+                int joy = joystickPressedList.get(event.getActionIndex());
+                for (int i = 0; i < joystickPressedList.size(); i++) {
+                    int currentIDPoint = event.getPointerId(i);
+                    Joystick1 joys = joystick1List.get(i);
+                    if (joy == currentIDPoint)
+                    {
+                        joys.setIsPressed(false);
+                        joys.resetActuator();
+                        Log.i(TAG," POINT UPP");
+                    }
+                }
+                return true;
         }
         return true;
     }
