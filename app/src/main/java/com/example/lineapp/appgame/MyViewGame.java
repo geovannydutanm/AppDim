@@ -30,14 +30,21 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.example.lineapp.R;
+import com.example.lineapp.lineapp4.MyView4;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -45,10 +52,21 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
     private final List<Joystick1> joystick1List = new ArrayList<>(2);
     private final List<Integer> joystickPressedList = new ArrayList<>(2);
     private final int posicionJ1_X = 100;
-    private final int posicionJ1_y = 700;
+    private final int posicionJ1_y = 100;
     private final int posicionJ2_X = 900;
     private final int posicionJ2_Y = 900;
+    private final int posicionJugador1_X = 250;
+    private final int posicionJugador1_Y = 250;
+    private final int posicionJugador2_X = 800;
+    private final int posicionJugador2_Y = 800;
     private MyViewGameLoop viewLoop;
+    //private final Players player;
+    private MVGameDisplay gameDisplay;
+    private MVGameDisplay gameDisplay2;
+    private  Canvas Jugador1;
+    private  Canvas Jugador2;
+    Paint paint = new Paint();
+    private HashMap<Integer, Players> PlayersList = new HashMap<Integer, Players>();
 
     public MyViewGame(Context context) {
         super(context);
@@ -57,20 +75,31 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
 
-        joystick1List.add(new Joystick1(posicionJ1_X, posicionJ1_y, 70, 40, Color.GREEN));
-        joystick1List.add(new Joystick1(posicionJ2_X, posicionJ2_Y, 70, 40, Color.RED));
+        Joystick1 joystick1 = new Joystick1(posicionJ1_X, posicionJ1_y, 70, 40, Color.GREEN);
+        Joystick1 joystick2 = new Joystick1(posicionJ2_X, posicionJ2_Y, 70, 40, Color.RED);
+        Players jugador1 = new Players(posicionJugador1_X, posicionJugador1_Y, 30, Color.GREEN);
+        Players jugador2 = new Players(posicionJugador2_X, posicionJugador2_Y, 30, Color.RED);
+        jugador1.setActuatorX(posicionJugador1_X);
+        jugador1.setActuatorY(posicionJugador1_Y);
+        joystick1List.add(joystick1);
+        joystick1List.add(joystick2);
+        PlayersList.put(1,jugador1);
+        PlayersList.put(2,jugador2);
 
         viewLoop = new MyViewGameLoop(this, surfaceHolder);
-
         // Initialize game panels
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        //gameDisplay = new MVGameDisplay(displayMetrics.widthPixels, displayMetrics.heightPixels, player);
         setFocusable(true);
     }
 
+    //Map<Integer, Joystick1> mapJoystick = new HashMap<Integer, Joystick1>();
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Handle user input touch event actions
+        int index = event.getActionIndex();
+        int puntoId = event.getPointerId(index);
         try {
             switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
@@ -100,6 +129,7 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                         double lX = event.getX(event.findPointerIndex(currentIDPoint));
                         double lY = event.getY(event.findPointerIndex(currentIDPoint));
                         joys.setActuator(lX, lY);
+
                     }
                     break;
                 case MotionEvent.ACTION_POINTER_UP:
@@ -153,13 +183,21 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         super.draw(canvas);
         for (Joystick1 j : joystick1List) {
             j.draw(canvas);
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            paint.setColor(j.getColor());
+            PlayersList.get(1).setActuatorX(j.getActuatorX());
         }
+        PlayersList.get(1).draw(canvas);
+        PlayersList.get(2).draw(canvas);
+
     }
 
     public void update() {
         for (Joystick1 j : joystick1List) {
             j.update();
         }
+        //player.update();
     }
 
     public void pause() {
