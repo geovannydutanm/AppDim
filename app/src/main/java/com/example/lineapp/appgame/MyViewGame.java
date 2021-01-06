@@ -28,6 +28,7 @@ package com.example.lineapp.appgame;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -51,14 +52,18 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
     private static final String TAG = "MyActivity";
     private final List<Joystick1> joystick1List = new ArrayList<>(2);
     private final List<Integer> joystickPressedList = new ArrayList<>(2);
-    private final int posicionJ1_X = 100;
-    private final int posicionJ1_y = 100;
-    private final int posicionJ2_X = 900;
-    private final int posicionJ2_Y = 900;
+
+
     private final int posicionJugador1_X = 250;
     private final int posicionJugador1_Y = 250;
     private final int posicionJugador2_X = 800;
     private final int posicionJugador2_Y = 800;
+
+    private int posicionJ1_X;
+    private int posicionJ1_Y;
+    private int posicionJ2_X;
+    private int posicionJ2_Y;
+
     private MyViewGameLoop viewLoop;
     //private final Players player;
     private MVGameDisplay gameDisplay;
@@ -75,16 +80,23 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
 
-        Joystick1 joystick1 = new Joystick1(posicionJ1_X, posicionJ1_y, 70, 40, Color.GREEN);
-        Joystick1 joystick2 = new Joystick1(posicionJ2_X, posicionJ2_Y, 70, 40, Color.RED);
+
+
         Players jugador1 = new Players(posicionJugador1_X, posicionJugador1_Y, 30, Color.GREEN);
         Players jugador2 = new Players(posicionJugador2_X, posicionJugador2_Y, 30, Color.RED);
         jugador1.setActuatorX(posicionJugador1_X);
         jugador1.setActuatorY(posicionJugador1_Y);
-        joystick1List.add(joystick1);
-        joystick1List.add(joystick2);
         PlayersList.put(1,jugador1);
         PlayersList.put(2,jugador2);
+        posicionJ1_X = getScreenWidth() / 2;
+        posicionJ2_X = getScreenWidth() / 2;
+
+        posicionJ1_Y = 150;
+        posicionJ2_Y = getScreenHeight() - getScreenHeight() / 5;
+
+        joystick1List.add(new Joystick1(posicionJ1_X, posicionJ1_Y, 70, 40, Color.GREEN));
+        joystick1List.add(new Joystick1(posicionJ2_X, posicionJ2_Y, 70, 40, Color.RED));
+
 
         viewLoop = new MyViewGameLoop(this, surfaceHolder);
         // Initialize game panels
@@ -94,7 +106,16 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         setFocusable(true);
     }
 
-    //Map<Integer, Joystick1> mapJoystick = new HashMap<Integer, Joystick1>();
+
+    public static int getScreenWidth() {
+        return Resources.getSystem().getDisplayMetrics().widthPixels;
+    }
+
+    public static int getScreenHeight() {
+        return Resources.getSystem().getDisplayMetrics().heightPixels;
+    }
+
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         // Handle user input touch event actions
