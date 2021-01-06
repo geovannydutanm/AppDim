@@ -32,20 +32,15 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.example.lineapp.R;
-import com.example.lineapp.lineapp4.MyView4;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -53,25 +48,22 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
     private final List<Joystick1> joystick1List = new ArrayList<>(2);
     private final List<Integer> joystickPressedList = new ArrayList<>(2);
 
-
     private final int posicionJugador1_X = 250;
     private final int posicionJugador1_Y = 250;
     private final int posicionJugador2_X = 800;
     private final int posicionJugador2_Y = 800;
-
-    private int posicionJ1_X;
-    private int posicionJ1_Y;
-    private int posicionJ2_X;
-    private int posicionJ2_Y;
-
+    private final int posicionJ1_X;
+    private final int posicionJ1_Y;
+    private final int posicionJ2_X;
+    private final int posicionJ2_Y;
+    private final HashMap<Integer, Players> PlayersList = new HashMap<Integer, Players>();
+    private final Paint paint = new Paint();
     private MyViewGameLoop viewLoop;
     //private final Players player;
     private MVGameDisplay gameDisplay;
     private MVGameDisplay gameDisplay2;
-    private  Canvas Jugador1;
-    private  Canvas Jugador2;
-    Paint paint = new Paint();
-    private HashMap<Integer, Players> PlayersList = new HashMap<Integer, Players>();
+    private Canvas Jugador1;
+    private Canvas Jugador2;
 
     public MyViewGame(Context context) {
         super(context);
@@ -81,13 +73,12 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         surfaceHolder.addCallback(this);
 
 
-
         Players jugador1 = new Players(posicionJugador1_X, posicionJugador1_Y, 30, Color.GREEN);
         Players jugador2 = new Players(posicionJugador2_X, posicionJugador2_Y, 30, Color.RED);
         jugador1.setActuatorX(posicionJugador1_X);
         jugador1.setActuatorY(posicionJugador1_Y);
-        PlayersList.put(1,jugador1);
-        PlayersList.put(2,jugador2);
+        PlayersList.put(1, jugador1);
+        PlayersList.put(2, jugador2);
         posicionJ1_X = getScreenWidth() / 2;
         posicionJ2_X = getScreenWidth() / 2;
 
