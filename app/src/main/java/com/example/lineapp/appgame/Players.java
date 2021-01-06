@@ -41,8 +41,8 @@ public class Players {
     public void draw(Canvas canvas) {
         // Draw outer circle
         canvas.drawCircle(
-                judadorPositionX,
-                judadorPositionY,
+                (float)this.x,
+                (float)this.y,
                 outerCircleRadius,
                 outerCirclePaint
         );
