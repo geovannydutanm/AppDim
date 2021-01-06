@@ -56,14 +56,9 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
     private final int posicionJ1_Y;
     private final int posicionJ2_X;
     private final int posicionJ2_Y;
-    private final HashMap<Integer, Players> PlayersList = new HashMap<Integer, Players>();
+    private final HashMap<Integer, Players> playersList = new HashMap<Integer, Players>();
     private final Paint paint = new Paint();
     private MyViewGameLoop viewLoop;
-    //private final Players player;
-    private MVGameDisplay gameDisplay;
-    private MVGameDisplay gameDisplay2;
-    private Canvas Jugador1;
-    private Canvas Jugador2;
 
     public MyViewGame(Context context) {
         super(context);
@@ -75,18 +70,18 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
 
         Players jugador1 = new Players(posicionJugador1_X, posicionJugador1_Y, 30, Color.GREEN);
         Players jugador2 = new Players(posicionJugador2_X, posicionJugador2_Y, 30, Color.RED);
-        jugador1.setActuatorX(posicionJugador1_X);
-        jugador1.setActuatorY(posicionJugador1_Y);
-        PlayersList.put(1, jugador1);
-        PlayersList.put(2, jugador2);
+        jugador1.setX(posicionJugador1_X);
+        jugador1.setY(posicionJugador1_Y);
+        playersList.put(1, jugador1);
+        playersList.put(2, jugador2);
         posicionJ1_X = getScreenWidth() / 2;
         posicionJ2_X = getScreenWidth() / 2;
 
         posicionJ1_Y = 150;
         posicionJ2_Y = getScreenHeight() - getScreenHeight() / 5;
 
-        joystick1List.add(new Joystick1(posicionJ1_X, posicionJ1_Y, 70, 40, Color.GREEN));
-        joystick1List.add(new Joystick1(posicionJ2_X, posicionJ2_Y, 70, 40, Color.RED));
+        joystick1List.add(new Joystick1(1, posicionJ1_X, posicionJ1_Y, 70, 40, Color.GREEN));
+        joystick1List.add(new Joystick1(2, posicionJ2_X, posicionJ2_Y, 70, 40, Color.RED));
 
 
         viewLoop = new MyViewGameLoop(this, surfaceHolder);
@@ -141,7 +136,8 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                         double lX = event.getX(event.findPointerIndex(currentIDPoint));
                         double lY = event.getY(event.findPointerIndex(currentIDPoint));
                         joys.setActuator(lX, lY);
-
+                        playersList.get(joys.getId()).setX(lX + 100);
+                        playersList.get(joys.getId()).setY(lY + 100);
                     }
                     break;
                 case MotionEvent.ACTION_POINTER_UP:
@@ -198,10 +194,9 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
             DisplayMetrics displayMetrics = new DisplayMetrics();
             ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
             paint.setColor(j.getColor());
-            PlayersList.get(1).setActuatorX(j.getActuatorX());
         }
-        PlayersList.get(1).draw(canvas);
-        PlayersList.get(2).draw(canvas);
+        playersList.get(1).draw(canvas);
+        playersList.get(2).draw(canvas);
 
     }
 
@@ -209,7 +204,6 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         for (Joystick1 j : joystick1List) {
             j.update();
         }
-        //player.update();
     }
 
     public void pause() {

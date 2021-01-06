@@ -20,8 +20,9 @@ public class Joystick1 {
     private double actuatorX;
     private double actuatorY;
     private int color;
+    private int id;
 
-    public Joystick1(int centerPositionX, int centerPositionY, int outerCircleRadius, int innerCircleRadius, int color) {
+    public Joystick1(int id, int centerPositionX, int centerPositionY, int outerCircleRadius, int innerCircleRadius, int color) {
 
         // Outer and inner circle make up the joystick
         outerCircleCenterPositionX = centerPositionX;
@@ -41,6 +42,15 @@ public class Joystick1 {
         innerCirclePaint = new Paint();
         innerCirclePaint.setColor(color);
         innerCirclePaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void draw(Canvas canvas) {

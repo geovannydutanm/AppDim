@@ -1,13 +1,7 @@
 package com.example.lineapp.appgame;
 
-import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-
-import androidx.core.content.ContextCompat;
-
-import com.example.lineapp.R;
 
 
 public class Players {
@@ -18,21 +12,21 @@ public class Players {
     //private final int innerCircleRadius;
     //private final Paint innerCirclePaint;
     private final Paint outerCirclePaint;
-    private int innerCircleCenterPositionX;
-    private int innerCircleCenterPositionY;
+    private int innerCirclex;
+    private int innerCircley;
     private boolean isPressed = false;
     private double joystickCenterToTouchDistance;
-    private double actuatorX;
-    private double actuatorY;
+    private double x;
+    private double y;
     private int color;
 
-    public Players(int centerPositionX, int centerPositionY, int outerCircleRadius, int color) {
+    public Players(int x, int y, int outerCircleRadius, int color) {
 
         // Outer and inner circle make up the joystick
-        judadorPositionX = centerPositionX;
-        judadorPositionY = centerPositionY;
-        actuatorX= centerPositionX;
-        actuatorY= centerPositionY;
+        judadorPositionX = x;
+        judadorPositionY = y;
+        this.x = x;
+        this.y = y;
 
         // Radii of circles
         this.outerCircleRadius = outerCircleRadius;
@@ -60,40 +54,47 @@ public class Players {
     }
 
     private void updateInnerCirclePosition() {
-        innerCircleCenterPositionX = (int) (actuatorX);
-        innerCircleCenterPositionY = (int) (actuatorY);
+        innerCirclex = (int) (x);
+        innerCircley = (int) (y);
     }*/
 
     public void setActuator(double touchPositionX, double touchPositionY) {
-        this.actuatorX = touchPositionX;
-        this.actuatorY = touchPositionY;
+        this.x = touchPositionX;
+        this.y = touchPositionY;
     }
-
 
 
     public void setIsPressed(boolean isPressed) {
         this.isPressed = isPressed;
     }
 
-    public double getActuatorX() {
-        return actuatorX;
+    public int getJudadorPositionX() {
+        return judadorPositionX;
     }
 
-    public void setActuatorX(double actuatorX) {
-        this.actuatorX = actuatorX;
+    public int getJudadorPositionY() {
+        return judadorPositionY;
     }
 
-    public double getActuatorY() {
-        return actuatorY;
+    public double getX() {
+        return x;
     }
 
-    public void setActuatorY(double actuatorY) {
-        this.actuatorY = actuatorY;
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
     }
 
     public void resetActuator() {
-        actuatorX = 0;
-        actuatorY = 0;
+        this.x = 0;
+        this.y = 0;
     }
 
     public int judadorPositionX() {
@@ -104,20 +105,20 @@ public class Players {
         return judadorPositionY;
     }
 
-    public int getInnerCircleCenterPositionX() {
-        return innerCircleCenterPositionX;
+    public int getInnerCirclex() {
+        return innerCirclex;
     }
 
-    public void setInnerCircleCenterPositionX(int innerCircleCenterPositionX) {
-        this.innerCircleCenterPositionX = innerCircleCenterPositionX;
+    public void setInnerCirclex(int innerCirclex) {
+        this.innerCirclex = innerCirclex;
     }
 
-    public int getInnerCircleCenterPositionY() {
-        return innerCircleCenterPositionY;
+    public int getInnerCircley() {
+        return innerCircley;
     }
 
-    public void setInnerCircleCenterPositionY(int innerCircleCenterPositionY) {
-        this.innerCircleCenterPositionY = innerCircleCenterPositionY;
+    public void setInnerCircley(int innerCircley) {
+        this.innerCircley = innerCircley;
     }
 
     public int getOuterCircleRadius() {
