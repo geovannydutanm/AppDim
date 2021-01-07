@@ -49,6 +49,14 @@ public class Players {
 
     }
 
+    protected double velocityX, velocityY = 0.0;
+    public void update(double x) {
+
+        velocityX = (float)this.x*0.0010;
+        // Update position
+        this.x += velocityX;
+    }
+
     /*public void update() {
         updateInnerCirclePosition();
     }

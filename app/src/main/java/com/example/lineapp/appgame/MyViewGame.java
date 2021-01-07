@@ -68,12 +68,7 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         surfaceHolder.addCallback(this);
 
 
-        Players jugador1 = new Players(posicionJugador1_X, posicionJugador1_Y, 30, Color.GREEN);
-        Players jugador2 = new Players(posicionJugador2_X, posicionJugador2_Y, 30, Color.RED);
-        jugador1.setX(posicionJugador1_X);
-        jugador1.setY(posicionJugador1_Y);
-        playersList.put(1, jugador1);
-        playersList.put(2, jugador2);
+
         posicionJ1_X = getScreenWidth() / 2;
         posicionJ2_X = getScreenWidth() / 2;
 
@@ -83,6 +78,12 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         joystick1List.add(new Joystick1(1, posicionJ1_X, posicionJ1_Y, 70, 40, Color.GREEN));
         joystick1List.add(new Joystick1(2, posicionJ2_X, posicionJ2_Y, 70, 40, Color.RED));
 
+        Players jugador1 = new Players(posicionJ1_X, posicionJ1_Y+100, 30, Color.GREEN);
+        Players jugador2 = new Players(posicionJ2_X, posicionJ2_Y-100, 30, Color.RED);
+        //jugador1.setX(posicionJugador1_X);
+        //jugador1.setY(posicionJugador1_Y);
+        playersList.put(1, jugador1);
+        playersList.put(2, jugador2);
 
         viewLoop = new MyViewGameLoop(this, surfaceHolder);
         // Initialize game panels
@@ -137,7 +138,6 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                         double lY = event.getY(event.findPointerIndex(currentIDPoint));
                         joys.setActuator(lX, lY);
                         playersList.get(joys.getId()).setX(lX + 100);
-                        playersList.get(joys.getId()).setY(lY + 100);
                     }
                     break;
                 case MotionEvent.ACTION_POINTER_UP:
