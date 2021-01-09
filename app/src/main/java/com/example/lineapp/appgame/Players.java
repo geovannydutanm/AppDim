@@ -32,7 +32,6 @@ public class Players {
         velocityX = (float) this.x * 0.0010;
         this.x += velocityX;
         this.x = (int) this.x;
-        System.out.println(this.x);
     }
 
     public void setActuator(double touchPositionX, double touchPositionY) {

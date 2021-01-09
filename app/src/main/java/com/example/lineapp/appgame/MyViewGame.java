@@ -74,10 +74,8 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
 
         Players jugador1 = new Players(posicionJ1_X - 50, posicionJ1_Y + 200, Color.GREEN);
         Players jugador2 = new Players(posicionJ2_X - 50, posicionJ2_Y - 200, Color.RED);
-        Players jugador3 = new Players(posicionJ2_X - 50, posicionJ2_Y - 200, Color.RED);
         playersList.put(1, jugador1);
         playersList.put(2, jugador2);
-        playersList.put(3, jugador3);
 
         viewLoop = new MyViewGameLoop(this, surfaceHolder);
         // Initialize game panels
@@ -87,7 +85,6 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         setFocusable(true);
     }
 
-
     public static int getScreenWidth() {
         return Resources.getSystem().getDisplayMetrics().widthPixels;
     }
@@ -95,7 +92,6 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
     public static int getScreenHeight() {
         return Resources.getSystem().getDisplayMetrics().heightPixels;
     }
-
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
