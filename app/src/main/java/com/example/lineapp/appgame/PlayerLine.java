@@ -109,6 +109,23 @@ public class PlayerLine {
 
     public void setColor(int color) {
         this.color = color;
+        this.lineObj.setColor(color);
+    }
+
+    public double getStartX() {
+        return this.lineObj.getRect().left;
+    }
+
+    public double getStartY() {
+        return this.lineObj.getRect().top;
+    }
+
+    public double getStopX() {
+        return this.lineObj.getRect().right;
+    }
+
+    public double getStopY() {
+        return this.lineObj.getRect().bottom;
     }
 }
 

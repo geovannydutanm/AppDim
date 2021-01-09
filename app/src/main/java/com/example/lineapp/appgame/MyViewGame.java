@@ -107,20 +107,27 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         }).start();
     }
 
-    private void checkTouchPlayer2Ball() {
+    private boolean checkTouchPlayer2Ball() {
         try {
             Ball ball = this.ballHashMap.get(1);
+            PlayerLine pl = this.playersList.get(2);
+            int posXBall = ball.getX();
+            int posYBall = ball.getY();
             if (!ball.isUp()) {
-                int posXBall = ball.getX();
-                int posYBall = ball.getY();
-                PlayerLine pl = this.playersList.get(2);
-                if ((posXBall + 75 <= pl.getX() && posXBall - 75 >= pl.getX()) && posYBall - 10 == pl.getY()) {
-                    this.ballHashMap.get(1).updateUp(150);
+                pl.setColor(Color.YELLOW);
+                if (pl.getStartX() <= posXBall && pl.getStopX() >= posXBall
+                        && pl.getStartY() - 40 <= posYBall && pl.getStopY() >= posYBall) {
+                    ball.setUp(true);
+                    updateUp(150);
+                    return true;
                 }
+            } else {
+                System.out.println("Estamos aqui");
             }
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
+        return false;
     }
 
     @Override
@@ -204,15 +211,49 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
             viewLoop = new MyViewGameLoop(this, surfaceHolder);
         }
         if (!startGame) {
-            ballHashMap.get(1).setUp(false);
             startGame = !startGame;
             setTimeout(() -> {
-                checkTouchPlayer2Ball();
-                ballHashMap.get(1).updateDown(getScreenHeight() - 250);
                 System.out.println("Moviendo la bola");
+                updateDown(getScreenHeight() - 250);
             }, 1000);
         }
         viewLoop.startLoop();
+    }
+
+    public void updateDown(double x) {
+        int y = ballHashMap.get(1).getY();
+        boolean stop = false;
+        while (y < x && !stop) {
+            try {
+                ballHashMap.get(1).setUp(false);
+                int velocity = (int) (x * 0.002);
+                y += velocity;
+                ballHashMap.get(1).setY(y);
+                stop = checkTouchPlayer2Ball();
+                Thread.sleep(5);
+            } catch (Exception e) {
+                ballHashMap.get(1).setY((int) x);
+            }
+            y = ballHashMap.get(1).getY();
+        }
+    }
+
+    public void updateUp(double x) {
+        int y = ballHashMap.get(1).getY();
+        boolean stop = false;
+        while (x < y && !stop) {
+            try {
+                ballHashMap.get(1).setUp(true);
+                int velocity = (int) (x * 0.002);
+                y -= velocity;
+                ballHashMap.get(1).setY(y);
+                stop = checkTouchPlayer2Ball();
+                Thread.sleep(5);
+            } catch (Exception e) {
+                ballHashMap.get(1).setY((int) x);
+            }
+            y = ballHashMap.get(1).getY();
+        }
     }
 
     @Override

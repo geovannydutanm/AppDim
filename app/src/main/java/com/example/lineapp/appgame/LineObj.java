@@ -8,6 +8,7 @@ public class LineObj {
     private Paint paint;
     private int x;
     private int y;
+    private Rect rect;
 
     public LineObj(int x, int y, int color) {
         this.x = x;
@@ -17,13 +18,13 @@ public class LineObj {
     }
 
     public void draw(Canvas canvas) {
-        Rect newInRect = new Rect(this.x, this.y, this.x + 150, this.y + 20);
-        canvas.drawRect(newInRect, paint);
+        this.rect = new Rect(this.x, this.y, this.x + 150, this.y + 20);
+        canvas.drawRect(this.rect, paint);
     }
 
     public void draw(int startX, int startY, int stopX, int stopY, Canvas canvas) {
-        Rect newInRect = new Rect(startX, startY, stopX, stopY);
-        canvas.drawRect(newInRect, paint);
+        this.rect = new Rect(startX, startY, stopX, stopY);
+        canvas.drawRect(this.rect, paint);
     }
 
     public Paint getPaint() {
@@ -48,5 +49,17 @@ public class LineObj {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public Rect getRect() {
+        return rect;
+    }
+
+    public void setRect(Rect rect) {
+        this.rect = rect;
+    }
+
+    public void setColor(int color) {
+        this.paint.setColor(color);
     }
 }
