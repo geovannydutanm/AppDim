@@ -59,7 +59,8 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
     private final HashMap<Integer, Players> playersList = new HashMap<Integer, Players>();
     private final Paint paint = new Paint();
     private MyViewGameLoop viewLoop;
-
+    //private final HashMap<Integer, Ataque> ataqueList = new HashMap<Integer, Ataque>();
+    private List<Ataque> ataqueList = new ArrayList<Ataque>();
     public MyViewGame(Context context) {
         super(context);
 
@@ -138,6 +139,12 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                         double lY = event.getY(event.findPointerIndex(currentIDPoint));
                         joys.setActuator(lX, lY);
                         playersList.get(joys.getId()).setX(lX + 100);
+                        int id=ataqueList.size()+1;
+                        int idJugador= joys.getId();
+                        int posAtaqueX=(int) playersList.get(idJugador).getX();
+                        int posAtaquey=(int) playersList.get(idJugador).getY();
+                        //
+                        ataqueList.add(new Ataque(id, idJugador,posAtaqueX, posAtaquey, joys.getColor()));
                     }
                     break;
                 case MotionEvent.ACTION_POINTER_UP:
@@ -189,20 +196,35 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        for (Joystick1 j : joystick1List) {
-            j.draw(canvas);
-            DisplayMetrics displayMetrics = new DisplayMetrics();
-            ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            paint.setColor(j.getColor());
-        }
-        playersList.get(1).draw(canvas);
-        playersList.get(2).draw(canvas);
+        try {
+            for (Joystick1 j : joystick1List) {
+                j.draw(canvas);
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                paint.setColor(j.getColor());
+            }
+            playersList.get(1).draw(canvas);
+            playersList.get(2).draw(canvas);
 
+            for (Ataque atq : ataqueList) {
+                atq.draw(canvas);
+            }
+
+        }catch(Exception ex){
+
+        }
     }
 
     public void update() {
-        for (Joystick1 j : joystick1List) {
-            j.update();
+        try {
+            for (Joystick1 j : joystick1List) {
+                j.update();
+            }
+            for (Ataque atq : ataqueList) {
+                atq.update();
+            }
+        }catch(Exception ex){
+
         }
     }
 

@@ -29,6 +29,7 @@ public class Joystick1 {
         outerCircleCenterPositionY = centerPositionY;
         innerCircleCenterPositionX = centerPositionX;
         innerCircleCenterPositionY = centerPositionY;
+        this.color = color;
 
         // Radii of circles
         this.outerCircleRadius = outerCircleRadius;
