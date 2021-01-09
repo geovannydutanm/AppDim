@@ -3,7 +3,7 @@ package com.example.lineapp.appgame;
 import android.graphics.Canvas;
 
 
-public class Players {
+public class PlayerLine {
     private final LineObj lineObj;
     protected double velocityX, velocityY = 0.0;
     private int innerCirclex;
@@ -14,7 +14,7 @@ public class Players {
     private double y;
     private int color;
 
-    public Players(int x, int y, int color) {
+    public PlayerLine(int x, int y, int color) {
         this.x = x;
         this.y = y;
         this.lineObj = new LineObj(x, y, color);
@@ -26,12 +26,6 @@ public class Players {
 
     public void draw(int startX, int startY, int stopX, int stopY, Canvas canvas) {
         lineObj.draw(startX, startY, stopX, stopY, canvas);
-    }
-
-    public void update(double x) {
-        velocityX = (float) this.x * 0.0010;
-        this.x += velocityX;
-        this.x = (int) this.x;
     }
 
     public void setActuator(double touchPositionX, double touchPositionY) {
@@ -115,7 +109,6 @@ public class Players {
 
     public void setColor(int color) {
         this.color = color;
-        //this.innerCirclePaint.setColor(this.color);
     }
 }
 

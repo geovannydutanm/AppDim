@@ -51,9 +51,11 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
     private final int posicionJ1_Y;
     private final int posicionJ2_X;
     private final int posicionJ2_Y;
-    private final HashMap<Integer, Players> playersList = new HashMap<Integer, Players>();
+    private final HashMap<Integer, PlayerLine> playersList = new HashMap<>();
+    private final HashMap<Integer, Ball> ballHashMap = new HashMap<>();
     private final Paint paint = new Paint();
     private MyViewGameLoop viewLoop;
+    private boolean startGame = false;
 
     public MyViewGame(Context context) {
         super(context);
@@ -62,8 +64,7 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
 
-
-        posicionJ1_X = getScreenWidth() / 2;
+        posicionJ1_X = (getScreenWidth() / 2);
         posicionJ2_X = getScreenWidth() / 2;
 
         posicionJ1_Y = 150;
@@ -72,10 +73,12 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         joystick1List.add(new Joystick1(1, posicionJ1_X, posicionJ1_Y, 70, 40, Color.GREEN));
         joystick1List.add(new Joystick1(2, posicionJ2_X, posicionJ2_Y, 70, 40, Color.RED));
 
-        Players jugador1 = new Players(posicionJ1_X - 50, posicionJ1_Y + 200, Color.GREEN);
-        Players jugador2 = new Players(posicionJ2_X - 50, posicionJ2_Y - 200, Color.RED);
+        PlayerLine jugador1 = new PlayerLine(posicionJ1_X - 75, posicionJ1_Y + 200, Color.GREEN);
+        PlayerLine jugador2 = new PlayerLine(posicionJ2_X - 75, posicionJ2_Y - 200, Color.RED);
+        Ball ball = new Ball(getScreenWidth() / 2, getScreenHeight() / 2 - 100, 35, Color.WHITE);
         playersList.put(1, jugador1);
         playersList.put(2, jugador2);
+        ballHashMap.put(1, ball);
 
         viewLoop = new MyViewGameLoop(this, surfaceHolder);
         // Initialize game panels
@@ -91,6 +94,33 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
 
     public static int getScreenHeight() {
         return Resources.getSystem().getDisplayMetrics().heightPixels;
+    }
+
+    public static void setTimeout(Runnable runnable, int delay) {
+        new Thread(() -> {
+            try {
+                Thread.sleep(delay);
+                runnable.run();
+            } catch (Exception e) {
+                System.err.println(e);
+            }
+        }).start();
+    }
+
+    private void checkTouchPlayer2Ball() {
+        try {
+            Ball ball = this.ballHashMap.get(1);
+            if (!ball.isUp()) {
+                int posXBall = ball.getX();
+                int posYBall = ball.getY();
+                PlayerLine pl = this.playersList.get(2);
+                if ((posXBall + 75 <= pl.getX() && posXBall - 75 >= pl.getX()) && posYBall - 10 == pl.getY()) {
+                    this.ballHashMap.get(1).updateUp(150);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     @Override
@@ -173,6 +203,15 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
             surfaceHolder.addCallback(this);
             viewLoop = new MyViewGameLoop(this, surfaceHolder);
         }
+        if (!startGame) {
+            ballHashMap.get(1).setUp(false);
+            startGame = !startGame;
+            setTimeout(() -> {
+                checkTouchPlayer2Ball();
+                ballHashMap.get(1).updateDown(getScreenHeight() - 250);
+                System.out.println("Moviendo la bola");
+            }, 1000);
+        }
         viewLoop.startLoop();
     }
 
@@ -188,6 +227,7 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void draw(Canvas canvas) {
+        checkTouchPlayer2Ball();
         super.draw(canvas);
         for (Joystick1 j : joystick1List) {
             j.draw(canvas);
@@ -197,6 +237,7 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         }
         playersList.get(1).draw(canvas);
         playersList.get(2).draw(canvas);
+        ballHashMap.get(1).draw(canvas);
     }
 
     public void update() {
