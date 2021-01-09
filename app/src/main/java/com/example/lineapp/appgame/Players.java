@@ -1,17 +1,11 @@
 package com.example.lineapp.appgame;
 
 import android.graphics.Canvas;
-import android.graphics.Paint;
 
 
 public class Players {
-
-    private final int judadorPositionX;
-    private final int judadorPositionY;
-    private final int outerCircleRadius;
-    //private final int innerCircleRadius;
-    //private final Paint innerCirclePaint;
-    private final Paint outerCirclePaint;
+    private final LineObj lineObj;
+    protected double velocityX, velocityY = 0.0;
     private int innerCirclex;
     private int innerCircley;
     private boolean isPressed = false;
@@ -20,76 +14,55 @@ public class Players {
     private double y;
     private int color;
 
-    public Players(int x, int y, int outerCircleRadius, int color) {
-
-        // Outer and inner circle make up the joystick
-        judadorPositionX = x;
-        judadorPositionY = y;
+    public Players(int x, int y, int color) {
         this.x = x;
         this.y = y;
-
-        // Radii of circles
-        this.outerCircleRadius = outerCircleRadius;
-        //this.innerCircleRadius = innerCircleRadius;
-
-        // paint of circles
-        outerCirclePaint = new Paint();
-        outerCirclePaint.setColor(color);
-        outerCirclePaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        this.lineObj = new LineObj(x, y, color);
     }
 
     public void draw(Canvas canvas) {
-        // Draw outer circle
-        canvas.drawCircle(
-                (float)this.x,
-                (float)this.y,
-                outerCircleRadius,
-                outerCirclePaint
-        );
-
+        lineObj.draw(canvas);
     }
 
-    protected double velocityX, velocityY = 0.0;
+    public void draw(int startX, int startY, int stopX, int stopY, Canvas canvas) {
+        lineObj.draw(startX, startY, stopX, stopY, canvas);
+    }
+
     public void update(double x) {
-
-        velocityX = (float)this.x*0.0010;
-        // Update position
+        velocityX = (float) this.x * 0.0010;
         this.x += velocityX;
+        this.x = (int) this.x;
+        System.out.println(this.x);
     }
-
-    /*public void update() {
-        updateInnerCirclePosition();
-    }
-
-    private void updateInnerCirclePosition() {
-        innerCirclex = (int) (x);
-        innerCircley = (int) (y);
-    }*/
 
     public void setActuator(double touchPositionX, double touchPositionY) {
         this.x = touchPositionX;
         this.y = touchPositionY;
     }
 
-
     public void setIsPressed(boolean isPressed) {
         this.isPressed = isPressed;
-    }
-
-    public int getJudadorPositionX() {
-        return judadorPositionX;
-    }
-
-    public int getJudadorPositionY() {
-        return judadorPositionY;
     }
 
     public double getX() {
         return x;
     }
 
-    public void setX(double x) {
-        this.x = x;
+    public void setX(double x, boolean left, int size) {
+        velocityX = (float) x * 0.020;
+        if (left) {
+            if (((int) (this.x + velocityX)) < size) {
+                this.x += velocityX;
+            }
+        } else {
+            if (((int) (this.x - velocityX)) > 0) {
+                this.x -= velocityX;
+            } else {
+                this.x = 0;
+            }
+        }
+        this.x = (int) this.x;
+        this.lineObj.setX((int) this.x);
     }
 
     public double getY() {
@@ -103,14 +76,6 @@ public class Players {
     public void resetActuator() {
         this.x = 0;
         this.y = 0;
-    }
-
-    public int judadorPositionX() {
-        return judadorPositionX;
-    }
-
-    public int judadorPositionY() {
-        return judadorPositionY;
     }
 
     public int getInnerCirclex() {
@@ -127,23 +92,6 @@ public class Players {
 
     public void setInnerCircley(int innerCircley) {
         this.innerCircley = innerCircley;
-    }
-
-    public int getOuterCircleRadius() {
-        return outerCircleRadius;
-    }
-
-    /*
-    public int getInnerCircleRadius() {
-        return innerCircleRadius;
-    }
-
-    public Paint getInnerCirclePaint() {
-        return innerCirclePaint;
-    }*/
-
-    public Paint getOuterCirclePaint() {
-        return outerCirclePaint;
     }
 
     public boolean isPressed() {
