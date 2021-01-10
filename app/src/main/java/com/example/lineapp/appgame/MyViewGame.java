@@ -114,11 +114,21 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
             int posXBall = ball.getX();
             int posYBall = ball.getY();
             if (!ball.isUp()) {
-                pl.setColor(Color.YELLOW);
                 if (pl.getStartX() <= posXBall && pl.getStopX() >= posXBall
                         && pl.getStartY() - 40 <= posYBall && pl.getStopY() >= posYBall) {
                     ball.setUp(true);
                     return true;
+                } else {
+                    pl = this.playersList.get(1);
+                    if (pl.getStartX() <= posXBall && pl.getStopX() >= posXBall
+                            && pl.getStartY() <= posYBall && posYBall <= pl.getStopY() + 40) {
+                        ball.setUp(false);
+                        setTimeout(() -> {
+                            ball.setY(posYBall + 40);
+                            ball.setColor(Color.RED);
+                            updateDown(getScreenHeight() - 250);
+                        }, 5);
+                    }
                 }
             } else {
                 if (pl.getStartX() <= posXBall && pl.getStopX() >= posXBall
@@ -268,7 +278,10 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
             } catch (Exception e) {
                 ballHashMap.get(1).setY((int) x);
             }
-            y = ballHashMap.get(1).getY();
+            y = stop ? (int) x : ballHashMap.get(1).getY();
+        }
+        if (x == y) {
+            checkTouchPlayer2Ball();
         }
     }
 
