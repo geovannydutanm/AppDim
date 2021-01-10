@@ -26,24 +26,24 @@ public class MyView3 extends View {
     Random random = new Random();
 
     private SparseArray<Path> paths;
-    private final JoystickTest joystickTest;
+    //private final JoystickTest joystickTest;
 
     public MyView3(Context context) {
         super(context);
         setupDrawing();
-        joystickTest = new JoystickTest(0, 0, 70, 40);
+        //joystickTest = new JoystickTest(0, 0, 70, 40);
     }
 
     public MyView3(Context context, AttributeSet attrs) {
         super(context, attrs);
         setupDrawing();
-        joystickTest = new JoystickTest(275, 700, 70, 40);
+        //joystickTest = new JoystickTest(275, 700, 70, 40);
     }
 
     public MyView3(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setupDrawing();
-        joystickTest = new JoystickTest(275, 700, 70, 40);
+        //joystickTest = new JoystickTest(275, 700, 70, 40);
     }
 
     private Paint dibujarPintar;

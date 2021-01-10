@@ -55,15 +55,12 @@ public class Joystick1 {
     }
 
     public void draw(Canvas canvas) {
-        // Draw outer circle
         canvas.drawCircle(
                 outerCircleCenterPositionX,
                 outerCircleCenterPositionY,
                 outerCircleRadius,
                 outerCirclePaint
         );
-
-        // Draw inner circle
         canvas.drawCircle(
                 innerCircleCenterPositionX,
                 innerCircleCenterPositionY,

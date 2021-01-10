@@ -24,12 +24,6 @@ public abstract class GameObject {
     public abstract void draw(Canvas canvas, MVGameDisplay gameDisplay);
     public abstract void update();
 
-    /**
-     * getDistanceBetweenObjects returns the distance between two game objects
-     * @param obj1
-     * @param obj2
-     * @return
-     */
     public static double getDistanceBetweenObjects(GameObject obj1, GameObject obj2) {
         return Math.sqrt(
                 Math.pow(obj2.getPositionX() - obj1.getPositionX(), 2) +

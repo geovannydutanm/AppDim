@@ -38,9 +38,13 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.example.lineapp.R;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -60,7 +64,10 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
     private final Paint paint = new Paint();
     private MyViewGameLoop viewLoop;
     //private final HashMap<Integer, Ataque> ataqueList = new HashMap<Integer, Ataque>();
-    private List<Ataque> ataqueList = new ArrayList<Ataque>();
+    private List<Attack> ataqueList = new ArrayList<Attack>();
+    private List<ObjectiveEnemy> objectiveEnemyList = new ArrayList<ObjectiveEnemy>();
+    Random random = new Random();
+
     public MyViewGame(Context context) {
         super(context);
 
@@ -89,7 +96,8 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         viewLoop = new MyViewGameLoop(this, surfaceHolder);
         // Initialize game panels
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        //((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
         //gameDisplay = new MVGameDisplay(displayMetrics.widthPixels, displayMetrics.heightPixels, player);
         setFocusable(true);
     }
@@ -122,6 +130,7 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                         joystick1List.get(1).setIsPressed(true);
                         joystickPressedList.add(1);
                     }
+
                     break;
                 case MotionEvent.ACTION_POINTER_DOWN:
                     if (joystickPressedList.size() == 1) {
@@ -144,7 +153,11 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                         int posAtaqueX=(int) playersList.get(idJugador).getX();
                         int posAtaquey=(int) playersList.get(idJugador).getY();
                         //
-                        ataqueList.add(new Ataque(id, idJugador,posAtaqueX, posAtaquey, joys.getColor()));
+                        ataqueList.add(new Attack(id, idJugador,posAtaqueX, posAtaquey, joys.getColor()));
+
+                        int idEnemy=objectiveEnemyList.size()+1;
+                        int posEnemyy = getScreenHeight()/ random.nextInt(6);
+                        objectiveEnemyList.add(new ObjectiveEnemy(idEnemy,100, posEnemyy, Color.YELLOW));
                     }
                     break;
                 case MotionEvent.ACTION_POINTER_UP:
@@ -163,6 +176,11 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                         joystick1List.get(i).setPressed(false);
                         joystick1List.get(i).resetActuator();
                     }
+                    int upX = (int) event.getX();
+                    int upY = (int) event.getY();
+                    int idEnemy=objectiveEnemyList.size()+1;
+                    int posEnemyy = getScreenHeight()/ random.nextInt(6);
+                    objectiveEnemyList.add(new ObjectiveEnemy(idEnemy,upX, upY, Color.YELLOW));
                     break;
             }
         } catch (Exception ex) {
@@ -170,6 +188,22 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
             return false;
         }
         return true;
+    }
+
+    public static boolean isColliding(Attack obj1, ObjectiveEnemy obj2) {
+        double distance = getDistanceBetweenObjects(obj1, obj2);
+        double distanceToCollision = obj1.getOuterCircleRadius() + obj2.getOuterCircleRadius();
+        if (distance < distanceToCollision)
+            return true;
+        else
+            return false;
+    }
+
+    public static double getDistanceBetweenObjects(Attack obj1, ObjectiveEnemy obj2) {
+        return Math.sqrt(
+                Math.pow(obj2.getX() - obj1.getX(), 2) +
+                        Math.pow(obj2.getX() - obj1.getX(), 2)
+        );
     }
 
     @Override
@@ -206,9 +240,14 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
             playersList.get(1).draw(canvas);
             playersList.get(2).draw(canvas);
 
-            for (Ataque atq : ataqueList) {
+            for (Attack atq : ataqueList) {
                 atq.draw(canvas);
             }
+
+            for (ObjectiveEnemy obj : objectiveEnemyList) {
+                obj.draw(canvas);
+            }
+
 
         }catch(Exception ex){
 
@@ -220,8 +259,44 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
             for (Joystick1 j : joystick1List) {
                 j.update();
             }
-            for (Ataque atq : ataqueList) {
-                atq.update();
+            for (ObjectiveEnemy obj : objectiveEnemyList) {
+                obj.update();
+            }
+            for (Attack atq : ataqueList) {
+                if(atq.getY()<100)
+                {
+                    ataqueList.remove(atq);
+                }
+                else{
+                    atq.update();
+                }
+
+            }
+
+
+            //Capturar Ataques
+
+            Iterator<ObjectiveEnemy> iteratorEnemy = objectiveEnemyList.iterator();
+            while (iteratorEnemy.hasNext()) {
+                ObjectiveEnemy enemy = iteratorEnemy.next();
+                /*
+                if (Circle.isColliding(enemy, player)) {
+                    // Remove enemy if it collides with the player
+                    iteratorEnemy.remove();
+                    player.setHealthPoint(player.getHealthPoint() - 1);
+                    continue;
+                }*/
+
+                Iterator<Attack> iteratorSpell = ataqueList.iterator();
+                while (iteratorSpell.hasNext()) {
+                    Attack spell = iteratorSpell.next();
+                    // Remove enemy if it collides with a spell
+                    if (isColliding(spell, enemy)) {
+                        iteratorSpell.remove();
+                        iteratorEnemy.remove();
+                        break;
+                    }
+                }
             }
         }catch(Exception ex){
 
