@@ -113,6 +113,8 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
             PlayerLine pl = this.playersList.get(2);
             int posXBall = ball.getX();
             int posYBall = ball.getY();
+            if (posXBall == 0) {
+            }
             if (!ball.isUp()) { // Down ball
                 if (pl.getStartX() <= posXBall && pl.getStopX() >= posXBall
                         && pl.getStartY() - 40 <= posYBall && pl.getStopY() >= posYBall) {
@@ -123,9 +125,17 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                     if (pl.getStartX() <= posXBall && pl.getStopX() >= posXBall
                             && pl.getStartY() <= posYBall && posYBall <= pl.getStopY() + 40) { // Ball is setting to down
                         ball.setUp(false);
+                        int direction = 1;
+                        if (pl.getStartX() + 25 <= ball.getX() && ball.getX() <= (pl.getStartX() + 75)) {
+                            direction = 2;
+                        }
+                        if (pl.getStartX() <= ball.getX() && ball.getX() <= (pl.getStartX() + 50)) {
+                            direction = 0;
+                        }
+                        int finalDirection = direction;
                         setTimeout(() -> {
                             ball.setY(posYBall + 40);
-                            updateDown(getScreenHeight() - 250);
+                            updateDown(getScreenHeight() - 250, finalDirection);
                         }, 5);
                     }
                 }
@@ -133,9 +143,17 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                 if (pl.getStartX() <= posXBall && pl.getStopX() >= posXBall
                         && pl.getStartY() - 40 <= posYBall && pl.getStopY() >= posYBall) { // Ball is setting to up
                     ball.setUp(true);
+                    int direction = 1;
+                    if (pl.getStartX() + 25 <= ball.getX() && ball.getX() <= (pl.getStartX() + 75)) {
+                        direction = 2;
+                    }
+                    if (pl.getStartX() <= ball.getX() && ball.getX() <= (pl.getStartX() + 50)) {
+                        direction = 0;
+                    }
+                    int finalDirection = direction;
                     setTimeout(() -> {
                         ball.setY(posYBall - 41);
-                        updateUp(150);
+                        updateUp(150, finalDirection);
                     }, 5);
                 } else {
                     pl = this.playersList.get(1);
@@ -235,13 +253,13 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         if (!startGame) {
             startGame = !startGame;
             setTimeout(() -> {
-                updateDown(getScreenHeight() - 250);
+                updateDown(getScreenHeight() - 250, 1);
             }, 1000);
         }
         viewLoop.startLoop();
     }
 
-    public void updateDown(double x) {
+    public void updateDown(double x, int direction) {
         int y = ballHashMap.get(1).getY();
         boolean stop = false;
         while (y < x && !stop) {
@@ -250,7 +268,14 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                 int velocity = (int) (x * 0.002);
                 y += velocity;
                 ballHashMap.get(1).setY(y);
-                double velocityX = ballHashMap.get(1).getX() + (ballHashMap.get(1).getX() * 0.0002) + 1;
+                double velocityX = 0;
+                if (direction == 0) {
+                    velocityX = ballHashMap.get(1).getX() + (ballHashMap.get(1).getX() * 0.0002) + 1;
+                } else if (direction == 1) {
+                    velocityX = ballHashMap.get(1).getX() - (ballHashMap.get(1).getX() * 0.0002);
+                } else {
+                    velocityX = ballHashMap.get(1).getX();
+                }
                 ballHashMap.get(1).setX((int) velocityX);
                 stop = checkTouchPlayer2Ball();
                 Thread.sleep(5);
@@ -264,7 +289,10 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
-    public void updateUp(double x) {
+    // direction = 0 -> left
+    // direction = 1 -> rigth
+    // direction = 2 -> vertical
+    public void updateUp(double x, int direction) {
         int y = ballHashMap.get(1).getY();
         boolean stop = false;
         while (x < y && !stop) {
@@ -273,7 +301,14 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                 double velocity = (x * 0.02);
                 y -= velocity;
                 ballHashMap.get(1).setY(y);
-                double velocityX = ballHashMap.get(1).getX() - (ballHashMap.get(1).getX() * 0.0002) - 1;
+                double velocityX = 0;
+                if (direction == 0) {
+                    velocityX = ballHashMap.get(1).getX() - (ballHashMap.get(1).getX() * 0.0002);
+                } else if (direction == 1) {
+                    velocityX = ballHashMap.get(1).getX() + (ballHashMap.get(1).getX() * 0.0002) + 1;
+                } else {
+                    velocityX = ballHashMap.get(1).getX();
+                }
                 ballHashMap.get(1).setX((int) velocityX);
                 stop = checkTouchPlayer2Ball();
                 Thread.sleep(5);
