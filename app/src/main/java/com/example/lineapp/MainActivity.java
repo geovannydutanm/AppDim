@@ -1,11 +1,11 @@
 package com.example.lineapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.lineapp.appgame.Activiyapp_game;
 import com.example.lineapp.lineapp1.Activiyapp1;
@@ -13,17 +13,9 @@ import com.example.lineapp.lineapp2.Activiyapp2;
 import com.example.lineapp.lineapp3.Activiyapp3;
 import com.example.lineapp.lineapp4.Activiyapp4;
 import com.example.lineapp.lineapp5.Activiyapp5;
-//import com.example.lineapp.dimapp2.Activiyapp2;
 
 
-//import com.example.dimappfinal.Ejercicio_2.Activity2;
-//import com.example.dimappfinal.Ejercicio_3.Activity3;
-//import com.example.dimappfinal.Ejercicio_4.Activity4;
-//import com.example.dimappfinal.Ejercicio_5.Activity5;
-//import com.example.dimappfinal.Entregable.Activity6;
-
-
-public class MainActivity extends  AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

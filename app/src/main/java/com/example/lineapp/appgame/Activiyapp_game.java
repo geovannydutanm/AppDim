@@ -6,13 +6,6 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Activiyapp_game extends AppCompatActivity {
-    /*
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_activiyapp_game);
-        }
-    */
     private MyViewGame game;
 
     @Override
@@ -58,7 +51,6 @@ public class Activiyapp_game extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // Comment out "super.onBackPressed()" to disable button
-        //super.onBackPressed();
+        super.onBackPressed();
     }
 }
