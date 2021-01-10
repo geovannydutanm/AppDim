@@ -118,11 +118,25 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                 if (pl.getStartX() <= posXBall && pl.getStopX() >= posXBall
                         && pl.getStartY() - 40 <= posYBall && pl.getStopY() >= posYBall) {
                     ball.setUp(true);
-                    updateUp(150);
                     return true;
                 }
             } else {
-                System.out.println("Estamos aqui");
+                if (pl.getStartX() <= posXBall && pl.getStopX() >= posXBall
+                        && pl.getStartY() - 40 <= posYBall && pl.getStopY() >= posYBall) {
+                    ball.setUp(true);
+                    setTimeout(() -> {
+                        ball.setY(posYBall - 41);
+                        ball.setColor(Color.RED);
+                        updateUp(150);
+                    }, 5);
+                } else {
+                    pl = this.playersList.get(1);
+                    if (pl.getStartX() <= posXBall && pl.getStopX() >= posXBall
+                            && pl.getStartY() <= posYBall && posYBall <= pl.getStopY() + 40) {
+                        ball.setUp(false);
+                        return true;
+                    }
+                }
             }
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -213,7 +227,6 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         if (!startGame) {
             startGame = !startGame;
             setTimeout(() -> {
-                System.out.println("Moviendo la bola");
                 updateDown(getScreenHeight() - 250);
             }, 1000);
         }
@@ -234,7 +247,10 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
             } catch (Exception e) {
                 ballHashMap.get(1).setY((int) x);
             }
-            y = ballHashMap.get(1).getY();
+            y = stop ? (int) x : ballHashMap.get(1).getY();
+        }
+        if (x == y) {
+            checkTouchPlayer2Ball();
         }
     }
 
@@ -244,7 +260,7 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         while (x < y && !stop) {
             try {
                 ballHashMap.get(1).setUp(true);
-                int velocity = (int) (x * 0.002);
+                double velocity = (x * 0.02);
                 y -= velocity;
                 ballHashMap.get(1).setY(y);
                 stop = checkTouchPlayer2Ball();
@@ -268,7 +284,6 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void draw(Canvas canvas) {
-        checkTouchPlayer2Ball();
         super.draw(canvas);
         for (Joystick1 j : joystick1List) {
             j.draw(canvas);
