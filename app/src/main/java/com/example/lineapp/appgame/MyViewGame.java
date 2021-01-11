@@ -253,10 +253,14 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         if (!startGame) {
             startGame = !startGame;
             setTimeout(() -> {
-                updateDown(getScreenHeight() - 250, 1);
+                updateDown(getScreenHeight() - 250, getRandomNumber(0, 2));
             }, 1000);
         }
         viewLoop.startLoop();
+    }
+
+    public int getRandomNumber(int min, int max) {
+        return (int) ((Math.random() * (max - min)) + min);
     }
 
     public void updateDown(double x, int direction) {
