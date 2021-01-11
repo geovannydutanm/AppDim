@@ -38,8 +38,6 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.example.lineapp.R;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -48,8 +46,8 @@ import java.util.Random;
 
 public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
 
-    private static final String TAG = "MyActivity";
-    private final List<Joystick1> joystickList = new ArrayList<>(2);
+    private static final String TAG = "Activiyapp_game";
+    private final List<Joystick> joystickList = new ArrayList<>(2);
     private final List<Integer> joystickPressedList = new ArrayList<>(2);
     //private final Joystick1 joystick1;
 
@@ -74,8 +72,8 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         posicionJ2_X = getScreenWidth() / 2;
         posicionJ1_Y = 150;
         posicionJ2_Y = getScreenHeight() - getScreenHeight() / 5;
-        joystickList.add(new Joystick1(1, posicionJ1_X, posicionJ1_Y, 70, 40, Color.GREEN));
-        joystickList.add(new Joystick1(2, posicionJ2_X, posicionJ2_Y, 70, 40, Color.RED));
+        joystickList.add(new Joystick(1, posicionJ1_X, posicionJ1_Y, 70, 40, Color.GREEN));
+        joystickList.add(new Joystick(2, posicionJ2_X, posicionJ2_Y, 70, 40, Color.RED));
 
         Players jugador1 = new Players(posicionJ1_X, posicionJ1_Y+100, 30, Color.GREEN);
         Players jugador2 = new Players(posicionJ2_X, posicionJ2_Y-100, 30, Color.RED);
@@ -84,8 +82,6 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
 
         viewLoop = new MyViewGameLoop(this, surfaceHolder);
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        //((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        //gameDisplay = new MVGameDisplay(displayMetrics.widthPixels, displayMetrics.heightPixels, player);
         setFocusable(true);
     }
 
@@ -101,7 +97,6 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        // Handle user input touch event actions
         int index = event.getActionIndex();
         int puntoId = event.getPointerId(index);
         float indexX = event.getX(index);
@@ -138,7 +133,6 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                     }
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    Log.d("OPCION AADDDD", " sss " + event.getPointerCount());
                     for (int i = 0; i < event.getPointerCount(); i++) {
                         indexX = event.getX(i);
                         indexY = event.getY(i);
@@ -155,7 +149,6 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                             int posAtaqueX=(int) playersList.get(idJugador).getX();
                             int posAtaquey=(int) playersList.get(idJugador).getY();
                             ataqueList.add(new Attack(id, idJugador,posAtaqueX, posAtaquey, joystickList.get(0).getColor()));
-                            Log.d("OPCION 1", " 11111111111111111111111111111");
                         }
                         if (indexX >= pressNegX2 & indexX <= pressPstX2 &
                                 indexY >= pressNegY2 & indexY <= pressPstY2)
@@ -170,7 +163,6 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                             int posAtaqueX=(int) playersList.get(idJugador).getX();
                             int posAtaquey=(int) playersList.get(idJugador).getY();
                             ataqueList.add(new Attack(id, idJugador,posAtaqueX, posAtaquey, joystickList.get(1).getColor()));
-                            Log.d("OPCION 12", " 222222222222222");
                         }
                     }
                     return true;
@@ -187,16 +179,6 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                     int puntoId1 = event.getPointerId(index);
                     objectiveEnemyList.add(new ObjectiveEnemy(idEnemy,(int) event.getX(puntoId1), (int) event.getY(puntoId1), Color.YELLOW));
                     return true;
-                    /*
-                    int joyUp = joystickPressedList.get(event.getActionIndex());
-                    int intJoyDown = joystickPressedList.get(joyUp == 0 ? 1 : 0);
-                    joystickPressedList.clear();
-                    joystickPressedList.add(intJoyDown);
-                    joystickList.get(joyUp).setColor(joyUp == 0 ? Color.GREEN : Color.RED);
-                    joystickList.get(joyUp).setIsPressed(false);
-                    joystickList.get(joyUp).resetActuator();*/
-                //case MotionEvent.ACTION_CANCEL:
-
             }
         } catch (Exception ex) {
             Log.i(TAG, " Error" + ex);
@@ -243,7 +225,7 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
     public void draw(Canvas canvas) {
         super.draw(canvas);
         try {
-            for (Joystick1 j : joystickList) {
+            for (Joystick j : joystickList) {
                 j.draw(canvas);
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -255,12 +237,9 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
             for (Attack atq : ataqueList) {
                 atq.draw(canvas);
             }
-
             for (ObjectiveEnemy obj : objectiveEnemyList) {
                 obj.draw(canvas);
             }
-
-
         }catch(Exception ex){
 
         }
@@ -268,7 +247,7 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update() {
         try {
-            for (Joystick1 j : joystickList) {
+            for (Joystick j : joystickList) {
                 j.update();
             }
             for (ObjectiveEnemy obj : objectiveEnemyList) {
@@ -282,27 +261,14 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                 else{
                     atq.update();
                 }
-
             }
-
-
             //Capturar Ataques
-
             Iterator<ObjectiveEnemy> iteratorEnemy = objectiveEnemyList.iterator();
             while (iteratorEnemy.hasNext()) {
                 ObjectiveEnemy enemy = iteratorEnemy.next();
-                /*
-                if (Circle.isColliding(enemy, player)) {
-                    // Remove enemy if it collides with the player
-                    iteratorEnemy.remove();
-                    player.setHealthPoint(player.getHealthPoint() - 1);
-                    continue;
-                }*/
-
                 Iterator<Attack> iteratorSpell = ataqueList.iterator();
                 while (iteratorSpell.hasNext()) {
                     Attack spell = iteratorSpell.next();
-                    // Remove enemy if it collides with a spell
                     if (isColliding(spell, enemy)) {
                         iteratorSpell.remove();
                         iteratorEnemy.remove();
@@ -311,7 +277,6 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                 }
             }
         }catch(Exception ex){
-
         }
     }
 

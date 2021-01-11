@@ -154,15 +154,6 @@ public class ObjectiveEnemy {
         return outerCircleRadius;
     }
 
-    /*
-    public int getInnerCircleRadius() {
-        return innerCircleRadius;
-    }
-
-    public Paint getInnerCirclePaint() {
-        return innerCirclePaint;
-    }*/
-
     public Paint getOuterCirclePaint() {
         return outerCirclePaint;
     }
@@ -189,7 +180,6 @@ public class ObjectiveEnemy {
 
     public void setColor(int color) {
         this.color = color;
-        //this.innerCirclePaint.setColor(this.color);
     }
 }
 

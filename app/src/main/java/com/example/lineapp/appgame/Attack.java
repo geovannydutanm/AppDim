@@ -7,8 +7,6 @@ public class Attack {
     private final int judadorPositionX;
     private final int judadorPositionY;
     private final int outerCircleRadius;
-    //private final int innerCircleRadius;
-    //private final Paint innerCirclePaint;
     private final Paint outerCirclePaint;
     private int innerCirclex;
     private int innerCircley;
@@ -16,15 +14,9 @@ public class Attack {
     private double joystickCenterToTouchDistance;
     private double x;
     private double y;
-
-
     private int color;
     private int idJugador;
     private int idAtaque;
-
-
-
-
     public int getIdAtaque() {
         return idAtaque;
     }
@@ -46,19 +38,13 @@ public class Attack {
 
     public Attack(int idAtaque, int idJugador, int x, int y, int color) {
 
-        // Outer and inner circle make up the joystick
         this.idAtaque=idAtaque;
         this.idJugador=idJugador;
         judadorPositionX = x;
         judadorPositionY = y;
         this.x = x;
         this.y = y;
-
-        // Radii of circles
         this.outerCircleRadius = 20;
-        //this.innerCircleRadius = innerCircleRadius;
-
-        // paint of circles
         outerCirclePaint = new Paint();
         outerCirclePaint.setColor(color);
         outerCirclePaint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -207,7 +193,6 @@ public class Attack {
 
     public void setColor(int color) {
         this.color = color;
-        //this.innerCirclePaint.setColor(this.color);
     }
 
 

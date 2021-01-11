@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-public class Joystick1 {
+public class Joystick {
 
     private final int outerCircleCenterPositionX;
     private final int outerCircleCenterPositionY;
@@ -31,7 +31,7 @@ public class Joystick1 {
         this.currentIDPoint = currentIDPoint;
     }
 
-    public Joystick1(int id, int centerPositionX, int centerPositionY, int outerCircleRadius, int innerCircleRadius, int color) {
+    public Joystick(int id, int centerPositionX, int centerPositionY, int outerCircleRadius, int innerCircleRadius, int color) {
 
         // Outer and inner circle make up the joystick
         outerCircleCenterPositionX = centerPositionX;
