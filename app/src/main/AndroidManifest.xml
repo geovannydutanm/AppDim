@@ -10,15 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LineApp">
         <activity android:name=".appgame.Activiyapp_game"></activity>
-        <activity android:name=".lineapp5.Activiyapp5" />
-        <activity android:name=".lineapp4.Activiyapp4" />
-        <activity android:name=".lineapp3.Activiyapp3" />
-        <activity android:name=".lineapp2.Activiyapp2" />
-        <activity android:name=".lineapp1.Activiyapp1" />
+        <activity android:name=".appgameball.AppGameBalls"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

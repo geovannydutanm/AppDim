@@ -1,10 +1,10 @@
-package com.example.lineapp.lineapp5;
+package com.example.lineapp.appgameball;
 
 //import android.annotation.NonNull;
+
 import android.graphics.Path;
 
 import androidx.annotation.Nullable;
-//import androidx.annotation.RecentlyNonNull;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -13,6 +13,8 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
+
+//import androidx.annotation.RecentlyNonNull;
 
 public class DesignPatch extends Path {
     int designPatch_grosor;
@@ -63,22 +65,14 @@ public class DesignPatch extends Path {
     public float getdesignPatchDimension() {
         return designPatch_dimension;
     }
+
     public void setdesignPatchDimension(float dimension) {
         this.designPatch_dimension = dimension;
     }
+
     @Retention(SOURCE)
     @Target({METHOD, PARAMETER, FIELD})
     public @interface NonNull {
     }
-    /*public final long mNativePath;
-
-    private static native void nAddRoundRect(long nPath, float left, float top,
-                                             float right, float bottom, float rx, float ry, int dir);
-    @Override
-    public void addRoundRect(float left, float top, float right, float bottom, float rx, float ry,
-                             @android.annotation.NonNull Direction dir) {
-        isSimplePath = false;
-        nAddRoundRect(mNativePath, left, top, right, bottom, rx, ry, dir.nativeInt);
-    }*/
 
 }
