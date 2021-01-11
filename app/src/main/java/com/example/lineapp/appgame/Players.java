@@ -88,8 +88,24 @@ public class Players {
         return x;
     }
 
-    public void setX(double x) {
-        this.x = x;
+    public void setX(double x, boolean left, int size) {
+        velocityX = (float) x * 0.020;
+        if (left) {
+            //if (((int) (this.x + velocityX)) < size) {
+            if (((int) (this.x)) >20) {
+                if (this.x>20)
+                    this.x -= velocityX;
+            }
+        } else {
+            if (((int) (this.x)) < 900) {
+                this.x += velocityX;
+            }
+            /*else {
+                this.x = 0;
+            }*/
+        }
+        this.x = (int) this.x;
+        //this.x = x;
     }
 
     public double getY() {

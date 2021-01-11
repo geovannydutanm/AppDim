@@ -62,7 +62,7 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
     //private final HashMap<Integer, Ataque> ataqueList = new HashMap<Integer, Ataque>();
     private final List<Attack> ataqueList = new ArrayList<Attack>();
     private final List<ObjectiveEnemy> objectiveEnemyList = new ArrayList<ObjectiveEnemy>();
-
+    private int displayWidth = getScreenWidth();
     public MyViewGame(Context context) {
         super(context);
         SurfaceHolder surfaceHolder = getHolder();
@@ -97,7 +97,15 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
     public static boolean isColliding(Attack obj1, ObjectiveEnemy obj2) {
         double distance = getDistanceBetweenObjects(obj1, obj2);
         double distanceToCollision = obj1.getOuterCircleRadius() + obj2.getOuterCircleRadius();
-        return distance < distanceToCollision;
+        boolean result =false;
+        double ataquePosX =obj2.getX()+20;
+        double ataqueNegX =obj2.getX()-20;
+        double ataquePosY =obj2.getY()+20;
+        double ataqueNegY =obj2.getY()-20;
+
+        if (obj1.getX() >=ataqueNegX &  obj1.getX() <=ataquePosX & obj1.getY() >=ataqueNegY &  obj1.getY() <=ataquePosY)//(distance>=0 & distance<=2)//obj1.getX()==obj2.getX() & obj1.getY()==obj2.getY())
+            result =true;
+        return result;
     }
 
     public static double getDistanceBetweenObjects(Attack obj1, ObjectiveEnemy obj2) {
@@ -152,7 +160,22 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                             double lX = event.getX(event.findPointerIndex(getcurrentIDPoint));
                             double lY = event.getY(event.findPointerIndex(getcurrentIDPoint));
                             joystickList.get(0).setActuator(lX, lY);
-                            playersList.get(1).setX(lX + 100);
+                            //MANDO
+                            double left;
+                            boolean leftBool = false;
+                            int size = getScreenWidth() - 150;
+                            if (lX < posicionJ1_X) {
+                                leftBool = true;
+                                left = ((lX + 100) < (getScreenWidth() - 200)) ? (lX + 100) : (getScreenWidth() - 200);
+                            } else {
+                                left = lX - 200 <= 0 ? 0 : lX - 200;
+                                size = 0;
+                            }
+                            left = (int) left;
+                            playersList.get(1).setX(left, leftBool, displayWidth);
+                            //MANDO
+                            //playersList.get(1).setX(lX + 100);
+
                             int id = ataqueList.size() + 1;
                             int idJugador = 1;
                             int posAtaqueX = (int) playersList.get(idJugador).getX();
@@ -165,7 +188,21 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                             double lX = event.getX(event.findPointerIndex(getcurrentIDPoint));
                             double lY = event.getY(event.findPointerIndex(getcurrentIDPoint));
                             joystickList.get(1).setActuator(lX, lY);
-                            playersList.get(2).setX(lX + 100);
+                            //JUGADOR
+                            double left;
+                            boolean leftBool = false;
+                            //int size = getScreenWidth() - 20;
+                            if (lX < posicionJ1_X) {
+                                leftBool = true;
+                                left = ((lX + 100) < (getScreenWidth() - 200)) ? (lX + 100) : (getScreenWidth() - 200);
+                            } else {
+                                left = lX - 200 <= 0 ? 0 : lX - 200;
+                                //size = 0;
+                            }
+                            left = (int) left;
+                            playersList.get(2).setX(left, leftBool, displayWidth);
+                            //JUGADOR END
+                            //playersList.get(2).setX(lX + 100);
                             int id = ataqueList.size() + 1;
                             int idJugador = 2;
                             int posAtaqueX = (int) playersList.get(idJugador).getX();

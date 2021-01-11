@@ -42,7 +42,7 @@ public class PlayerLine {
     }
 
     public void setX(double x, boolean left, int size) {
-        velocityX = (float) x * 0.020;
+        /*velocityX = (float) x * 0.020;
         if (left) {
             if (((int) (this.x + velocityX)) < size) {
                 this.x += velocityX;
@@ -53,6 +53,22 @@ public class PlayerLine {
             } else {
                 this.x = 0;
             }
+        }
+        this.x = (int) this.x;*/
+        velocityX = (float) x * 0.020;
+        if (left) {
+            //if (((int) (this.x + velocityX)) < size) {
+            if (((int) (this.x)) >20) {
+                if (this.x>20)
+                    this.x -= velocityX;
+            }
+        } else {
+            if (((int) (this.x)) < size) {
+                this.x += velocityX;
+            }
+            /*else {
+                this.x = 0;
+            }*/
         }
         this.x = (int) this.x;
         this.lineObj.setX((int) this.x);

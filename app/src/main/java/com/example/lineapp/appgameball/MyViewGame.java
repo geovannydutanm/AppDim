@@ -204,13 +204,14 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
                         double lY = event.getY(event.findPointerIndex(currentIDPoint));
                         double left;
                         boolean leftBool = false;
-                        int size = getScreenWidth() - 150;
+                        //int size = getScreenWidth() - 150;
+                        int size = getScreenWidth();
                         if (lX < posicionJ1_X) {
                             leftBool = true;
                             left = ((lX + 100) < (getScreenWidth() - 200)) ? (lX + 100) : (getScreenWidth() - 200);
                         } else {
                             left = lX - 200 <= 0 ? 0 : lX - 200;
-                            size = 0;
+                            //size = 0;
                         }
                         left = (int) left;
                         joys.setActuator(lX, lY);
