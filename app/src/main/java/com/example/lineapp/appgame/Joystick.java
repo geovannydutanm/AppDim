@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-public class Joystick1 {
+public class Joystick {
 
     private final int outerCircleCenterPositionX;
     private final int outerCircleCenterPositionY;
@@ -21,14 +21,24 @@ public class Joystick1 {
     private double actuatorY;
     private int color;
     private int id;
+    private int currentIDPoint;
 
-    public Joystick1(int id, int centerPositionX, int centerPositionY, int outerCircleRadius, int innerCircleRadius, int color) {
+    public int getCurrentIDPoint() {
+        return currentIDPoint;
+    }
+
+    public void setCurrentIDPoint(int currentIDPoint) {
+        this.currentIDPoint = currentIDPoint;
+    }
+
+    public Joystick(int id, int centerPositionX, int centerPositionY, int outerCircleRadius, int innerCircleRadius, int color) {
 
         // Outer and inner circle make up the joystick
         outerCircleCenterPositionX = centerPositionX;
         outerCircleCenterPositionY = centerPositionY;
         innerCircleCenterPositionX = centerPositionX;
         innerCircleCenterPositionY = centerPositionY;
+        this.color = color;
 
         // Radii of circles
         this.outerCircleRadius = outerCircleRadius;
@@ -54,15 +64,12 @@ public class Joystick1 {
     }
 
     public void draw(Canvas canvas) {
-        // Draw outer circle
         canvas.drawCircle(
                 outerCircleCenterPositionX,
                 outerCircleCenterPositionY,
                 outerCircleRadius,
                 outerCirclePaint
         );
-
-        // Draw inner circle
         canvas.drawCircle(
                 innerCircleCenterPositionX,
                 innerCircleCenterPositionY,
