@@ -49,13 +49,10 @@ import java.util.Random;
 public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
 
     private static final String TAG = "MyActivity";
-    private final List<Joystick1> joystick1List = new ArrayList<>(2);
+    private final List<Joystick1> joystickList = new ArrayList<>(2);
     private final List<Integer> joystickPressedList = new ArrayList<>(2);
+    //private final Joystick1 joystick1;
 
-    private final int posicionJugador1_X = 250;
-    private final int posicionJugador1_Y = 250;
-    private final int posicionJugador2_X = 800;
-    private final int posicionJugador2_Y = 800;
     private final int posicionJ1_X;
     private final int posicionJ1_Y;
     private final int posicionJ2_X;
@@ -70,34 +67,24 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
 
     public MyViewGame(Context context) {
         super(context);
-
-        // Get surface holder and add callback
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
 
-
-
         posicionJ1_X = getScreenWidth() / 2;
         posicionJ2_X = getScreenWidth() / 2;
-
         posicionJ1_Y = 150;
         posicionJ2_Y = getScreenHeight() - getScreenHeight() / 5;
-
-        joystick1List.add(new Joystick1(1, posicionJ1_X, posicionJ1_Y, 70, 40, Color.GREEN));
-        joystick1List.add(new Joystick1(2, posicionJ2_X, posicionJ2_Y, 70, 40, Color.RED));
+        joystickList.add(new Joystick1(1, posicionJ1_X, posicionJ1_Y, 70, 40, Color.GREEN));
+        joystickList.add(new Joystick1(2, posicionJ2_X, posicionJ2_Y, 70, 40, Color.RED));
 
         Players jugador1 = new Players(posicionJ1_X, posicionJ1_Y+100, 30, Color.GREEN);
         Players jugador2 = new Players(posicionJ2_X, posicionJ2_Y-100, 30, Color.RED);
-        //jugador1.setX(posicionJugador1_X);
-        //jugador1.setY(posicionJugador1_Y);
         playersList.put(1, jugador1);
         playersList.put(2, jugador2);
 
         viewLoop = new MyViewGameLoop(this, surfaceHolder);
-        // Initialize game panels
         DisplayMetrics displayMetrics = new DisplayMetrics();
         //((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
         //gameDisplay = new MVGameDisplay(displayMetrics.widthPixels, displayMetrics.heightPixels, player);
         setFocusable(true);
     }
@@ -117,74 +104,102 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
         // Handle user input touch event actions
         int index = event.getActionIndex();
         int puntoId = event.getPointerId(index);
+        float indexX = event.getX(index);
+        float indexY = event.getY(index);
+        float pressNegX1= posicionJ1_X-100;
+        float pressPstX1= posicionJ1_X+100;
+        float pressNegY1= posicionJ1_Y-100;
+        float pressPstY1= posicionJ1_Y+100;
+
+        float pressNegX2= posicionJ2_X-100;
+        float pressPstX2= posicionJ2_X+100;
+        float pressNegY2= posicionJ2_Y-100;
+        float pressPstY2= posicionJ2_Y+100;
         try {
             switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
-                    float x = event.getX();
-                    float y = event.getY();
-                    joystickPressedList.clear();
-                    if (joystick1List.get(0).isPressed(x, y)) {
-                        joystick1List.get(0).setIsPressed(true);
-                        joystickPressedList.add(0);
-                    } else if (joystick1List.get(1).isPressed(x, y)) {
-                        joystick1List.get(1).setIsPressed(true);
-                        joystickPressedList.add(1);
-                    }
-
-                    break;
                 case MotionEvent.ACTION_POINTER_DOWN:
-                    if (joystickPressedList.size() == 1) {
-                        int joy = joystickPressedList.get(0) == 0 ? 1 : 0;
-                        joystickPressedList.add(joy);
+                    indexX = event.getX(index);
+                    indexY = event.getY(index);
+                    indexX = event.getX(index);
+                    indexY = event.getY(index);
+                    if (indexX >= pressNegX1 & indexX <= pressPstX1 &
+                            indexY >= pressNegY1 & indexY <= pressPstY1)
+                    {
+                        joystickList.get(0).setIsPressed(true);
+                        joystickList.get(0).setCurrentIDPoint(puntoId);
                     }
-                    Joystick1 joystick = joystickPressedList.get(event.getActionIndex()) == 0 ? joystick1List.get(0) : joystick1List.get(1);
-                    joystick.setIsPressed(true);
+                    if (indexX >= pressNegX2 & indexX <= pressPstX2 &
+                            indexY >= pressNegY2 & indexY <= pressPstY2)
+                    {
+                        joystickList.get(1).setIsPressed(true);
+                        joystickList.get(1).setCurrentIDPoint(puntoId);
+
+                    }
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    for (int i = 0; i < joystickPressedList.size(); i++) {
-                        int currentIDPoint = event.getPointerId(i);
-                        Joystick1 joys = joystick1List.get(joystickPressedList.get(i));
-                        double lX = event.getX(event.findPointerIndex(currentIDPoint));
-                        double lY = event.getY(event.findPointerIndex(currentIDPoint));
-                        joys.setActuator(lX, lY);
-                        playersList.get(joys.getId()).setX(lX + 100);
-                        int id=ataqueList.size()+1;
-                        int idJugador= joys.getId();
-                        int posAtaqueX=(int) playersList.get(idJugador).getX();
-                        int posAtaquey=(int) playersList.get(idJugador).getY();
-                        //
-                        ataqueList.add(new Attack(id, idJugador,posAtaqueX, posAtaquey, joys.getColor()));
-
-                        int idEnemy=objectiveEnemyList.size()+1;
-                        int posEnemyy = getScreenHeight()/ random.nextInt(6);
-                        objectiveEnemyList.add(new ObjectiveEnemy(idEnemy,100, posEnemyy, Color.YELLOW));
+                    Log.d("OPCION AADDDD", " sss " + event.getPointerCount());
+                    for (int i = 0; i < event.getPointerCount(); i++) {
+                        indexX = event.getX(i);
+                        indexY = event.getY(i);
+                        if (indexX >= pressNegX1 & indexX <= pressPstX1 &
+                                indexY >= pressNegY1 & indexY <= pressPstY1)
+                        {
+                            int getcurrentIDPoint = joystickList.get(0).getCurrentIDPoint();
+                            double lX = event.getX(event.findPointerIndex(getcurrentIDPoint));
+                            double lY = event.getY(event.findPointerIndex(getcurrentIDPoint));
+                            joystickList.get(0).setActuator(lX, lY);
+                            playersList.get(1).setX(lX + 100);
+                            int id=ataqueList.size()+1;
+                            int idJugador= 1;
+                            int posAtaqueX=(int) playersList.get(idJugador).getX();
+                            int posAtaquey=(int) playersList.get(idJugador).getY();
+                            ataqueList.add(new Attack(id, idJugador,posAtaqueX, posAtaquey, joystickList.get(0).getColor()));
+                            Log.d("OPCION 1", " 11111111111111111111111111111");
+                        }
+                        if (indexX >= pressNegX2 & indexX <= pressPstX2 &
+                                indexY >= pressNegY2 & indexY <= pressPstY2)
+                        {
+                            int getcurrentIDPoint = joystickList.get(1).getCurrentIDPoint();
+                            double lX = event.getX(event.findPointerIndex(getcurrentIDPoint));
+                            double lY = event.getY(event.findPointerIndex(getcurrentIDPoint));
+                            joystickList.get(1).setActuator(lX, lY);
+                            playersList.get(2).setX(lX + 100);
+                            int id=ataqueList.size()+1;
+                            int idJugador= 2;
+                            int posAtaqueX=(int) playersList.get(idJugador).getX();
+                            int posAtaquey=(int) playersList.get(idJugador).getY();
+                            ataqueList.add(new Attack(id, idJugador,posAtaqueX, posAtaquey, joystickList.get(1).getColor()));
+                            Log.d("OPCION 12", " 222222222222222");
+                        }
                     }
-                    break;
+                    return true;
+                case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_POINTER_UP:
+                    joystickPressedList.clear();
+                    for (int i = 0; i < joystickList.size(); i++) {
+                        joystickList.get(i).setColor(i == 0 ? Color.GREEN : Color.RED);
+                        joystickList.get(i).setPressed(false);
+                        joystickList.get(i).resetActuator();
+                    }
+                    int idEnemy=objectiveEnemyList.size()+1;
+                    int posEnemyy = getScreenHeight()/ random.nextInt(6);
+                    int puntoId1 = event.getPointerId(index);
+                    objectiveEnemyList.add(new ObjectiveEnemy(idEnemy,(int) event.getX(puntoId1), (int) event.getY(puntoId1), Color.YELLOW));
+                    return true;
+                    /*
                     int joyUp = joystickPressedList.get(event.getActionIndex());
                     int intJoyDown = joystickPressedList.get(joyUp == 0 ? 1 : 0);
                     joystickPressedList.clear();
                     joystickPressedList.add(intJoyDown);
-                    joystick1List.get(joyUp).setColor(joyUp == 0 ? Color.GREEN : Color.RED);
-                    joystick1List.get(joyUp).setIsPressed(false);
-                    joystick1List.get(joyUp).resetActuator();
-                    break;
-                case MotionEvent.ACTION_UP:
-                    joystickPressedList.clear();
-                    for (int i = 0; i < joystick1List.size(); i++) {
-                        joystick1List.get(i).setColor(i == 0 ? Color.GREEN : Color.RED);
-                        joystick1List.get(i).setPressed(false);
-                        joystick1List.get(i).resetActuator();
-                    }
-                    int upX = (int) event.getX();
-                    int upY = (int) event.getY();
-                    int idEnemy=objectiveEnemyList.size()+1;
-                    int posEnemyy = getScreenHeight()/ random.nextInt(6);
-                    objectiveEnemyList.add(new ObjectiveEnemy(idEnemy,upX, upY, Color.YELLOW));
-                    break;
+                    joystickList.get(joyUp).setColor(joyUp == 0 ? Color.GREEN : Color.RED);
+                    joystickList.get(joyUp).setIsPressed(false);
+                    joystickList.get(joyUp).resetActuator();*/
+                //case MotionEvent.ACTION_CANCEL:
+
             }
         } catch (Exception ex) {
-            Log.i(TAG, " EEE" + ex);
+            Log.i(TAG, " Error" + ex);
             return false;
         }
         return true;
@@ -208,7 +223,6 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        Log.d("Game.java", "surfaceCreated()");
         if (viewLoop.getState().equals(Thread.State.TERMINATED)) {
             SurfaceHolder surfaceHolder = getHolder();
             surfaceHolder.addCallback(this);
@@ -219,19 +233,17 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        Log.d("Game.java", "surfaceChanged()");
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        Log.d("Game.java", "surfaceDestroyed()");
     }
 
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
         try {
-            for (Joystick1 j : joystick1List) {
+            for (Joystick1 j : joystickList) {
                 j.draw(canvas);
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -256,7 +268,7 @@ public class MyViewGame extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update() {
         try {
-            for (Joystick1 j : joystick1List) {
+            for (Joystick1 j : joystickList) {
                 j.update();
             }
             for (ObjectiveEnemy obj : objectiveEnemyList) {

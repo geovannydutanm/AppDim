@@ -21,6 +21,15 @@ public class Joystick1 {
     private double actuatorY;
     private int color;
     private int id;
+    private int currentIDPoint;
+
+    public int getCurrentIDPoint() {
+        return currentIDPoint;
+    }
+
+    public void setCurrentIDPoint(int currentIDPoint) {
+        this.currentIDPoint = currentIDPoint;
+    }
 
     public Joystick1(int id, int centerPositionX, int centerPositionY, int outerCircleRadius, int innerCircleRadius, int color) {
 
